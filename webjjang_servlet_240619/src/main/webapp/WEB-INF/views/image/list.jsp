@@ -144,7 +144,7 @@ button:hover {
 					</c:if>
 					<!-- 데이터 표시 시작 -->
 					<div class="col-md-4 dataRow">
-						<div class="card bg-primary" style="width: 100%;">
+						<div class="card text-dark" style="width: 100%;">
 							<img class="card-img-top" src="${vo.fileName }" alt="image"
 								style="width: 100%">
 							<div class="card-body">

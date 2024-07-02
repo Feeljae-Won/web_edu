@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.security.auth.message.callback.PrivateKeyCallback.Request;
+
 import com.webjjang.image.vo.ImageVO;
 import com.webjjang.main.dao.DAO;
 import com.webjjang.util.db.DB;
@@ -245,7 +247,9 @@ public class ImageDAO extends DAO {
 			pstmt = con.prepareStatement(UPDATE);
 			pstmt.setString(1, vo.getTitle());
 			pstmt.setString(2, vo.getContent());
+			pstmt.setString(3, vo.getFileName());
 			pstmt.setLong(4, vo.getNo());
+			pstmt.setString(5, vo.getId());
 			// 5. 실행 객체 실행 -> executeUpdate() -> int 결과가 나옴.
 			result = pstmt.executeUpdate();
 			// 6. 데이터 표시 또는 담기
@@ -376,7 +380,7 @@ public class ImageDAO extends DAO {
 	final String WRITE = "insert into image("
 			+ "no, title, content, id, fileName) values (image_seq.nextval, ?, ?, ?, ?) ";
 
-	final String UPDATE = "update image set " + " title = ?, content = ?, writer = ?" + " where no = ? and pw = ? ";
+	final String UPDATE = "update image set " + " title = ?, content = ?, fileName = ?" + " where no = ? and id = ? ";
 
 	final String DELETE = "delete from image " + " where no = ? and pw = ? ";
 

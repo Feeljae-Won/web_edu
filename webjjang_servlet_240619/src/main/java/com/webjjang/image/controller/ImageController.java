@@ -148,7 +148,7 @@ public class ImageController {
 				break;
 			
 			case "/image/updateForm.do":
-				System.out.println("4-1. 글수정 폼으로 이동");
+				System.out.println("4-1. 이미지 게시판 수정 폼으로 이동");
 				// 사용자가 -> 서버 : 글번호 데이터 수집
 				no = Long.parseLong(request.getParameter("no"));
 				
@@ -163,20 +163,25 @@ public class ImageController {
 				break;
 				
 			case "/image/update.do":
-				System.out.println("4-2. 게시판 글수정 처리");
+				System.out.println("4-2. 이미지 게시판 수정 처리");
+				
+				multi = new MultipartRequest(request, realSavePath, sizeLimit, "utf-8", new DefaultFileRenamePolicy());
 				
 				// 수정할 글 번호를 받는다. - 데이터 수집
-				strNo = request.getParameter("no");
+				strNo = multi.getParameter("no");
 				no = Long.parseLong(strNo);
 				
-				title = (String) request.getParameter("title");
-				content = (String) request.getParameter("content");
+				title = multi.getParameter("title");
+				content = multi.getParameter("content");
+				fileName = multi.getFilesystemName("imageFile");
 				
 				// 변수 - vo 저장하고 Service
 				vo = new ImageVO();
 				vo.setNo(no);
 				vo.setTitle(title);
 				vo.setContent(content);
+				vo.setFileName(fileName);
+				vo.setId(id);
 				
 				// [ImageController] - ImageWriteService - ImageDAO.writer(vo)
 				result = Execute.execute(Init.get(uri), vo);
@@ -188,7 +193,7 @@ public class ImageController {
 				jsp = "redirect:view.do?no=" + no + "&inc=0"
 						+ "&" + pageObject.getPageQuery(); 
 				
-				session.setAttribute("msg", "글 수정이 성공적으로 처리 되었습니다.");
+				session.setAttribute("msg", "이미지 수정이 완료 되었습니다.");
 				
 				break;
 				

@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"
+%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -48,85 +50,77 @@
 
 	<%-- 	글 번호 : ${param.no } 조회수 : ${param.inc } --%>
 	<div class="container p-3 my-3 bg-primary text-white"
-		style="border-radius: 10px 10px 10px 10px; hieght: 200px;">
+		style="border-radius: 10px 10px 10px 10px; hieght: 200px;"
+	>
 		<h2>
-			<i class="material-icons">chrome_reader_mode</i> Board View
+			<i class="material-icons">chrome_reader_mode</i> Image View
 		</h2>
 		<p>
 		<div class="float-right">
-			<a
-				href="/board/updateForm.do?no=${vo.no}&title=${vo.title}&content=${vo.content}&name=${vo.name}
+			<c:if test="${login.id == vo.id }">
+				<a
+					href="/image/updateForm.do?no=${vo.no}&title=${vo.title}&content=${vo.content}&id=${vo.id}&fileName=${vo.fileName }
 				&page=${param.page}&perPageNum=${para.perPageNum}&key=${param.key}&word=${param.word}"
-				class="btn btn-light"><b>Update</b></a>
-			<!-- 			<button class="btn btn-danger" id="deleteBtn"><b>Delete</b></button> -->
-			<!-- 삭제 버튼 Modal 적용 -->
-			<button type="button" class="btn btn-danger" id="deleteBtn">
-				<b>Delete</b>
-			</button>
+					class="btn btn-light"
+				>
+					<b>Update</b>
+				</a>
+				<!-- 			<button class="btn btn-danger" id="deleteBtn"><b>Delete</b></button> -->
+				<!-- 삭제 버튼 Modal 적용 -->
+				<button type="button" class="btn btn-danger" id="deleteBtn">
+					<b>Delete</b>
+				</button>
+			</c:if>
 
-			<a href="list.do?page=${param.page}&perPageNum=${para.perPageNum}&key=${param.key}&word=${param.word}">
-			<button type="button" class="btn btn-secondary cancelBtn">
-				<b>list</b>
-			</button></a>
-
-			<!-- 			<div id="deleteDiv"> -->
-			<!-- 				<form action="delete.jsp" method="post" id="deleteForm"> -->
-			<!-- 					<input type="hidden" name="no" value="10">  -->
-			<!-- 					<input name="pw" type="password" required maxlength="20" pattern="^.{3,20}$" id="pw" -->
-			<!-- 						title="3~20자 입력 가능" placeholder="본인 확인용 비밀번호" style="padding:5px; border-radius: 5px;"> -->
-			<!-- 					<button class="btn btn-danger"><b>삭제</b></button> -->
-			<!-- 					<button type="button" class="btn btn-secondary"	id="deleteCancelBtn"> -->
-			<!-- 						<b>취소</b> -->
-			<!-- 					</button> -->
-			<!-- 				</form> -->
-			<!-- 			</div> -->
+			<a
+				href="list.do?page=${param.page}&perPageNum=${para.perPageNum}&key=${param.key}&word=${param.word}"
+			>
+				<button type="button" class="btn btn-secondary cancelBtn">
+					<b>list</b>
+				</button>
+			</a>
 		</div>
-			<i class="fa fa-caret-right"></i> 이미지 게시판 상세보기
+		<i class="fa fa-caret-right"></i> 이미지 게시판 상세보기
 		<p>
 		<hr>
-		<table class="table"
-			style="text-align: center; border-radius: 10px; border-style: hidden;">
-			<thead class="thead-dark">
-				<tr>
-					<th class="thead-dark" style="border-radius: 10px 0px 0px 0px;">번호</th>
-					<td class="dataRow table-light">${vo.no }</td>
-					<th class="thead-dark">제목</th>
-					<td class="dataRow table-light" colspan="10"
-						style="border-radius: 0px 10px 0px 0px;">${vo.title }</td>
-				</tr>
-			<thead class="thead-dark">
-				<tr>
-					<th class="thead-dark">작성자</th>
-					<td class="dataRow table-light" colspan="6">${vo.name }</td>
-					<th class="thead-dark">작성일</th>
-					<td class="dataRow table-light">${vo.writeDate }</td>
-					<th class="thead-dark">조회수</th>
-					<td class="dataRow table-light">${vo.hit }</td>
-				</tr>
-			<thead class="thead-dark">
-				<tr>
-					<td colspan="12" class="dataRow table-light"
-						style="height: 100%; text-align: left;"><pre>${vo.content}</pre></td>
-				</tr>
-				<tr>
-					<td colspan="12" class="dataRow table-light"
-						style="text-align: left; border-radius: 0px 0px 10px 10px;">
-						<image src="${vo.fileName}" style="width:100%;"><br><br>
-						<b><i class="fa fa-caret-right"></i> 첨부파일 : </b>
-						<a href="${vo.fileName}" download>${vo.fileName}</a>
-						</td>
-				</tr>
-			</thead>
-		</table>
+		<div class="card text-dark">
+			<div class="card-header">
+				<b>${vo.no }. ${vo.title } </b>
+			</div>
+			<div class="card-body">
+				<div class="card" style="width: 100%">
+					<img class="card-img-top" src="${vo.fileName }" alt="image">
+					<div class="card-img-overlay">
+						<c:if test="${login.id == vo.id }">
+							<button type="button" class="btn btn-primary" data-toggle="modal"
+								data-target="#changeImageModal"
+							>이미지 변경</button>
+						</c:if>
+						<a href="${vo.fileName }" class="btn btn-success" download>다운로드</a>
+					</div>
+
+					<div class="card-body">
+						<p class="card-text">
+						<pre>${vo.content }</pre>
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="card-footer">
+				<span class="float-right">${vo.writeDate }</span> ${vo.name }(${vo.id })
+			</div>
+		</div>
 		<hr>
 
-	<!-- 댓글 처리 시작 -->
-	<jsp:include page="reply.jsp"/>
-	<!-- 댓글 처리 끝 -->
+
+		<!-- 댓글 처리 시작 -->
+		<jsp:include page="reply.jsp" />
+		<!-- 댓글 처리 끝 -->
 
 
-	</div> <!-- 컨테이너 끝 -->
-	
+	</div>
+	<!-- 컨테이너 끝 -->
+
 	<!-- The Modal -->
 	<div class="modal fade" id="deleteModal">
 		<div class="modal-dialog modal-dialog-centered">
@@ -147,21 +141,63 @@
 				<div class="modal-footer">
 					<form action="delete.do" method="post" id="deleteForm">
 						<input type="hidden" name="page" value="${param.page }">
-						<input type="hidden" name="perPageNum" value="${param.perPageNum }">
+						<input type="hidden" name="perPageNum"
+							value="${param.perPageNum }"
+						>
 						<input type="hidden" name="key" value="${param.key }">
 						<input type="hidden" name="word" value="${param.word }">
-						
-						<input type="hidden" name="no" value="${vo.no }"> <input
-							name="pw" type="password" required maxlength="20"
+
+						<input type="hidden" name="no" value="${vo.no }">
+						<input name="pw" type="password" required maxlength="20"
 							pattern="^.{3,20}$" id="pw" title="3~20자 입력 가능"
 							placeholder="본인 확인용 비밀번호"
-							style="padding: 5px; border-radius: 5px;">
+							style="padding: 5px; border-radius: 5px;"
+						>
 						<button class="btn btn-danger" id="lastDelete">Delete</button>
 						<button type="button" class="btn btn-secondary"
-							data-dismiss="modal" id="deleteCancelBtn">Close</button>
+							data-dismiss="modal" id="deleteCancelBtn"
+						>Close</button>
 					</form>
 				</div>
 
+			</div>
+		</div>
+	</div>
+
+	<!-- The Modal -->
+	<div class="modal" id="changeImageModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<h4 class="modal-title">바꿀 이미지 선택하기</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+
+				<form action="changeImage.do" method="post"
+					enctype="multipart/form-data"
+				>
+					<!-- 숨겨서 넘겨야할 데이터 - 이미지 번호, 현재 파일이름(삭제) -->
+					<input name="no" value="${vo.no }" type="hidden">
+					<input name="deleteFileName" value="${vo.fileName }" type="hidden">
+					<!-- Modal body -->
+					<div class="modal-body">
+						<div class="form-group">
+							<label for="imageFile">첨부 이미지</label>
+							<input id="imageFile" name="imageFile" required
+								class="form-control" type="file"
+							>
+						</div>
+					</div>
+
+					<!-- Modal footer -->
+					<div class="modal-footer">
+						<button class="btn btn-primary">바꾸기</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
+					</div>
+
+				</form>
 			</div>
 		</div>
 	</div>
