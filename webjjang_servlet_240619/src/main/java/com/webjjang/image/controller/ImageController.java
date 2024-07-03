@@ -1,6 +1,8 @@
 package com.webjjang.image.controller;
 
 
+import java.io.File;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -82,10 +84,8 @@ public class ImageController {
 				System.out.println("2.일반게시판 글보기");
 				// 1. 조회수 1증가(글보기), 2. 일반게시판 글보기 데이터 가져오기 : 글보기, 수정할 때
 				// 넘어 오는 글 번호와 조회수 수집 한다. (데이터는 request 안에 들어 있다.)
-				String strNo = request.getParameter("no");
-				String strInc = request.getParameter("inc");
-				no = Long.parseLong(strNo);
-				Long inc = Long.parseLong(strInc);
+				no = Long.parseLong(request.getParameter("no"));
+				Long inc = Long.parseLong(request.getParameter("inc"));
 				// 전달 데이터 - 글번호, 조회수 증가 여부(1 : 증가, 0: 증가 안함) : 배열 또는 Map
 				result = Execute.execute(Init.get(uri), new Long[] {no, inc});
 				
@@ -114,6 +114,8 @@ public class ImageController {
 				
 				// 이미지 업로드 처리
 				// new MultipartRequest(request, 실제 저장위치, 사이즈 제한, 인코딩 타입, 중복처리 객체-파일 이름 뒤에 cnt 붙힘);
+				// file 객체 업로드 시 input의 name이 같으면 한개만 처리 가능
+				// 	name을 다르게 해서 올려야 한다.
 				MultipartRequest multi = 
 						new MultipartRequest(request, realSavePath, sizeLimit, "utf-8", new DefaultFileRenamePolicy());
 				
@@ -168,19 +170,16 @@ public class ImageController {
 				multi = new MultipartRequest(request, realSavePath, sizeLimit, "utf-8", new DefaultFileRenamePolicy());
 				
 				// 수정할 글 번호를 받는다. - 데이터 수집
-				strNo = multi.getParameter("no");
-				no = Long.parseLong(strNo);
+				no = Long.parseLong(multi.getParameter("no"));
 				
 				title = multi.getParameter("title");
 				content = multi.getParameter("content");
-				fileName = multi.getFilesystemName("imageFile");
 				
 				// 변수 - vo 저장하고 Service
 				vo = new ImageVO();
 				vo.setNo(no);
 				vo.setTitle(title);
 				vo.setContent(content);
-				vo.setFileName(fileName);
 				vo.setId(id);
 				
 				// [ImageController] - ImageWriteService - ImageDAO.writer(vo)
@@ -193,22 +192,22 @@ public class ImageController {
 				jsp = "redirect:view.do?no=" + no + "&inc=0"
 						+ "&" + pageObject.getPageQuery(); 
 				
-				session.setAttribute("msg", "이미지 수정이 완료 되었습니다.");
+				session.setAttribute("msg", "이미지 내용 수정이 완료 되었습니다.");
 				
 				break;
 				
 				
 			case "/image/delete.do":
-				System.out.println("5.일반게시판 글삭제");
+				System.out.println("5. 이미지 게시판 글 삭제");
 				
 				// 데이터 수집 - DB에서 실행에 필요한 데이터 - 글 번호, 비밀번호 - ImageVO
 				ImageVO deleteVO = new ImageVO();
-				strNo = request.getParameter("no");
-				no = Long.parseLong(strNo);
+				no = Long.parseLong(request.getParameter("no"));
 				deleteVO.setNo(no);
+				deleteVO.setId(id);
 				
 				// DB 처리
-				int result1 = (int) Execute.execute(Init.get(uri),deleteVO);
+				result = (int) Execute.execute(Init.get(uri),deleteVO);
 				
 //				// 페이지 정보 받기 & uri에 붙이기
 //				pageObject = PageObject.getInstance(request);
@@ -216,26 +215,65 @@ public class ImageController {
 				
 				jsp = "redirect:list.do" + "?perPageNum=" + request.getParameter("perPageNum");
 				
-				if(result1 == 1) {
+				if((int) result == 1) {
 					session.setAttribute("msg", "글 삭제가 성공적으로 처리 되었습니다.");
 				} else {
 					session.setAttribute("msg", "글 삭제가 처리되지 않았습니다. [비밀번호가 틀립니다.]");
 				}
 				break;
 				
+			case "/image/changeImage.do":
+				System.out.println("6. 이미지 변경 처리");
+				
+				// 파일 업로드 cos 라이브러리 - MultipartRequest
+				// 이미지 업로드 처리
+				// new MultipartRequest(request, 실제 저장위치, 사이즈 제한, 인코딩 타입, 중복처리 객체-파일 이름 뒤에 cnt 붙힘);
+				// file 객체 업로드 시 input의 name이 같으면 한개만 처리 가능
+				// 	name을 다르게 해서 올려야 한다.
+				multi = new MultipartRequest(request, realSavePath, sizeLimit, "utf-8", new DefaultFileRenamePolicy());
+				
+				// 수정할 글 번호를 받는다. - 데이터 수집
+				no = Long.parseLong(multi.getParameter("no"));
+				fileName = multi.getFilesystemName("imageFile");
+				
+				String deleteFileName = multi.getParameter("deleteFileName");
+				System.out.println("ImageController.changeImage().changeImage() : " + deleteFileName);
+				
+				// 변수 - vo 저장하고 Service : DB에 처리할 데이터만.
+				vo = new ImageVO();
+				vo.setNo(no);
+				vo.setFileName(savePath + "/" + fileName);
+				
+				// [ImageController] - ImageChangeService - ImageDAO.changeImage(vo)
+				Execute.execute(Init.get(uri), vo);
+				
+				// 지난 이미지 파일은 존재하면 지운다.
+				File deleteFile = new File(request.getServletContext().getRealPath(deleteFileName));
+				if (deleteFile.exists()) deleteFile.delete();
+				
+				// 페이지 정보 받기 & uri에 붙이기
+				pageObject = PageObject.getInstance(request);
+				System.out.println(pageObject);
+				
+				// 글보기로 자동 이동하기
+				jsp = "redirect:view.do?no=" + no + "&inc=0" + "&" + pageObject.getPageQuery(); 
+				
+				session.setAttribute("msg", "이미지 변경이 완료 되었습니다.");
+				
+				break;
+				
+				
 			default:
 				System.out.println("####################################");;
-				System.out.println("## 잘못된 메뉴를 선택하셨습니다.          ##");;
-				System.out.println("## [0~5, 0] 중에서 입력하셔야 합니다.    ##");;
+				System.out.println("##         잘못된 접근 입니다.        ##");;
 				System.out.println("####################################");;
 				break;
 			} // end of switch
 		} catch (Exception e) {
-			// TODO: handle exception
 				e.printStackTrace();
 			System.out.println();
 			System.out.println("$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@");
-			System.out.println("$%@ << 오류 출력 >>                         $%@");
+			System.out.println("$%@            << 오류 출력 >>              $%@");
 			System.out.println("$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@");
 			System.out.println("$%@ 타입 : " + e.getClass().getSimpleName());
 			System.out.println("$%@ 내용 : " + e.getMessage());

@@ -54,6 +54,7 @@ public class ImageDAO extends DAO {
 					vo.setName(rs.getString("name"));
 					vo.setWriteDate(rs.getString("writeDate"));
 					vo.setFileName(rs.getString("fileName"));
+					vo.setHit(rs.getLong("hit"));
 
 					// vo -> list
 					list.add(vo);
@@ -109,7 +110,7 @@ public class ImageDAO extends DAO {
 	} // end of getTotalRow
 
 	// 2-1. 상세보기 - 조회수 1 증가
-	// ImageController - (execute) - ImageListService - Image.DAO.increase()]
+	// ImageController - (execute) - ImageViewService - Image.DAO.increase()]
 	public int increase(Long no) throws Exception {
 
 		// 결과를 저장할 수 있는 변수 선언.
@@ -149,7 +150,7 @@ public class ImageDAO extends DAO {
 	} // end of increase()
 
 	// 2-2. 상세보기 처리
-	// ImageController - (execute) - ImageListService - [ImageDAO.view()]
+	// ImageController - (execute) - ImageViewService - [ImageDAO.view()]
 	public ImageVO view(Long no) throws Exception {
 		// 결과를 저장할 수 있는 변수 선언.
 		ImageVO vo = null;
@@ -194,7 +195,7 @@ public class ImageDAO extends DAO {
 	} // end of view
 
 	// 3. 글 등록
-	// ImageController - (execute) - ImageListService - [ImageDAO.view()]
+	// ImageController - (execute) - ImageWriteService - [ImageDAO.write()]
 	public int write(ImageVO vo) throws Exception {
 		// 결과를 저장할 수 있는 변수 선언.
 		int result = 0;
@@ -231,7 +232,7 @@ public class ImageDAO extends DAO {
 	} // end of write
 
 	// 4. 글 수정 처리
-	// ImageController - (execute) - ImageListService - Image.DAO.increase()]
+	// ImageController - (execute) - ImageUpdateService - Image.DAO.update()]
 	public int update(ImageVO vo) throws Exception {
 
 		// 결과를 저장할 수 있는 변수 선언.
@@ -247,14 +248,13 @@ public class ImageDAO extends DAO {
 			pstmt = con.prepareStatement(UPDATE);
 			pstmt.setString(1, vo.getTitle());
 			pstmt.setString(2, vo.getContent());
-			pstmt.setString(3, vo.getFileName());
-			pstmt.setLong(4, vo.getNo());
-			pstmt.setString(5, vo.getId());
+			pstmt.setLong(3, vo.getNo());
+			pstmt.setString(4, vo.getId());
 			// 5. 실행 객체 실행 -> executeUpdate() -> int 결과가 나옴.
 			result = pstmt.executeUpdate();
 			// 6. 데이터 표시 또는 담기
 			if (result == 0) { // 글 번호가 존재하지 않는다. -> 예외로 처리한다.
-				throw new Exception("예외 발생 : 글 번호나 비밀번호가 맞지 않습니다. 정보를 확인해 주세요.");
+				throw new Exception("예외 발생 : 글 번호나 맞지 않거나 본인이 작성한 글이 아닙니다. 정보를 확인해 주세요.");
 			} // end of if
 
 		} catch (Exception e) {
@@ -264,7 +264,7 @@ public class ImageDAO extends DAO {
 				throw e; // 오류 나면 던진다
 			// 그 외 처리 중 나타나는 오류에 대해서 사용자가 볼 수 잇는 예외로 만들어 전달한다.
 			else
-				throw new Exception("예외 발생 : 게시판 글 수정 DB 처리 중 예외가 발생했습니다.");
+				throw new Exception("예외 발생 : 이미지 게시글 수정 DB 처리 중 예외가 발생했습니다.");
 		} finally {
 			// 7. 닫기
 			DB.close(con, pstmt);
@@ -275,7 +275,7 @@ public class ImageDAO extends DAO {
 	} // end of update()
 
 	// 5. 글 삭제
-	// ImageController - (execute) - ImageListService - [ImageDAO.view()]
+	// ImageController - (execute) - ImageDeleteService - [ImageDAO.delete()]
 	public int delete(ImageVO vo) throws Exception {
 		// 결과를 저장할 수 있는 변수 선언.
 		int result = 0;
@@ -289,6 +289,7 @@ public class ImageDAO extends DAO {
 			// 4. 실행 객체 선언
 			pstmt = con.prepareStatement(DELETE);
 			pstmt.setLong(1, vo.getNo());
+			pstmt.setString(2, vo.getId());
 			// 5. 실행 객체 실행
 			result = pstmt.executeUpdate();
 			// 6. 데이터 표시 또는 담기
@@ -301,7 +302,7 @@ public class ImageDAO extends DAO {
 			if (result == 0)
 				; // 오류 나면 던진다
 			// 그 외 처리 중 나타나는 오류에 대해서 사용자가 볼 수 잇는 예외로 만들어 전달한다.
-			throw new Exception("예외 발생 : 게시판 글 삭제 DB 처리 중 예외가 발생했습니다.");
+			throw new Exception("예외 발생 : 이미지 삭제 DB 처리 중 예외가 발생했습니다.");
 		} finally {
 			// 7. 닫기
 			DB.close(con, pstmt);
@@ -312,6 +313,49 @@ public class ImageDAO extends DAO {
 
 	} // end of write
 
+	// 6. 이미지 변경 처리
+	// ImageController - (execute) - ChangeImageService- Image.DAO.changeImage()]
+	public int changeImage(ImageVO vo) throws Exception {
+
+		// 결과를 저장할 수 있는 변수 선언.
+		int result = 0;
+
+		try {
+			// 1. 드라이버 확인 - DB 클래스에서 확인 완료
+			// 2. 오라클 접속
+			con = DB.getConnection();
+			// 3. sql 문
+			System.out.println("sql : " + CHANGEIMAGE);
+			// 4. 실행 객체 선언 & 데이터 세팅
+			pstmt = con.prepareStatement(CHANGEIMAGE);
+			pstmt.setString(1, vo.getFileName());
+			pstmt.setLong(2, vo.getNo());
+			// 5. 실행 객체 실행 -> executeUpdate() -> int 결과가 나옴.
+			result = pstmt.executeUpdate();
+			// 6. 데이터 표시 또는 담기
+			if (result == 0) { // 글 번호가 존재하지 않는다. -> 예외로 처리한다.
+				throw new Exception("예외 발생 : 번호가 맞지 않습니다. 정보를 확인해 주세요.");
+			} // end of if
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			// 특별한 예외는 그냥 전달한다.
+			if (e.getMessage().indexOf("예외 발생") >= 0)
+				throw e; // 오류 나면 던진다
+			// 그 외 처리 중 나타나는 오류에 대해서 사용자가 볼 수 잇는 예외로 만들어 전달한다.
+			else
+				throw new Exception("예외 발생 : 이미지 변경 DB 처리 중 예외가 발생했습니다.");
+		} finally {
+			// 7. 닫기
+			DB.close(con, pstmt);
+		} // end of try ~ finally
+
+		// 결과 데이터를 리턴 해 준다.
+		return result;
+	} // end of changeImage()
+
+	
+	
 	// 실행할 쿼리를 정의해 놓은 변수 선언
 
 	// LIST의 페이지 처리 절차 - 원본데이터(select) -> 순서 번호(select) -> 해당 페이지 데이터만 가져온다.(select)
@@ -322,7 +366,6 @@ public class ImageDAO extends DAO {
 							+ " from image i, member m "
 							+ " where i.id = m.id ";
 			// 여기에 검색이 있어야 한다.
-	
 
 	// 검색이 있는 경우 TOTALROW + search
 	final String TOTALROW = "select count(*) from image";
@@ -380,8 +423,10 @@ public class ImageDAO extends DAO {
 	final String WRITE = "insert into image("
 			+ "no, title, content, id, fileName) values (image_seq.nextval, ?, ?, ?, ?) ";
 
-	final String UPDATE = "update image set " + " title = ?, content = ?, fileName = ?" + " where no = ? and id = ? ";
+	final String UPDATE = "update image set " + " title = ?, content = ?" + " where no = ? and id = ? ";
 
-	final String DELETE = "delete from image " + " where no = ? and pw = ? ";
+	final String DELETE = "delete from image " + " where no = ? and id = ? ";
+	
+	final String CHANGEIMAGE = "update image set " + " fileName = ? " + " where no = ?";
 
 } // end of class

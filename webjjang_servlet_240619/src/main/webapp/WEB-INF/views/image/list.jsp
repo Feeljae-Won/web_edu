@@ -148,13 +148,14 @@ button:hover {
 							<img class="card-img-top" src="${vo.fileName }" alt="image"
 								style="width: 100%">
 							<div class="card-body">
+									<span class="float-right">${vo.hit }</span>
 								<strong class="card-title">
-									<span class="float-right">${vo.writeDate }</span>
-									${vo.name }(${vo.id })
+									<span class="no">${vo.no }</span>. ${vo.title }
 								</strong>
 								<p>
 								<p class="card-text">
-									<span class="no">${vo.no }</span>. ${vo.title }
+									<span class="float-right">${vo.writeDate }</span>
+									${vo.name }(${vo.id })
 								</p>
 							</div>
 						</div>

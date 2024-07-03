@@ -5,9 +5,9 @@ import com.webjjang.image.vo.ImageVO;
 import com.webjjang.main.dao.DAO;
 import com.webjjang.main.service.Service;
 
-public class ImageDeleteService implements Service {
+public class ImageChangeService implements Service {
 
-private ImageDAO dao;
+	private ImageDAO dao;
 	
 	// dao setter
 	public void setDAO(DAO dao) {
@@ -17,10 +17,9 @@ private ImageDAO dao;
 	@Override
 	public Integer service(Object obj) throws Exception {
 		
-		// DB image에서 조회수 1증가 하고 글보기 데이터 가져와서 리턴
 		
 		
-		return dao.delete((ImageVO)obj);
+		return dao.changeImage((ImageVO)obj);
 
 	}
 }
