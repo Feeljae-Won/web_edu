@@ -54,7 +54,7 @@
 				return false;
 
 			// 글자 길이 체크
-			if (lengthCheck("#title", "제목", 3, 20, 1))
+			if (lengthCheck("#title", "제목", 3, 100, 1))
 				return false;
 			if (lengthCheck("#content", "내용", 3, 500, 1))
 				return false;

@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.security.auth.message.callback.PrivateKeyCallback.Request;
+
 
 import com.webjjang.image.vo.ImageVO;
 import com.webjjang.main.dao.DAO;
@@ -85,9 +85,10 @@ public class ImageDAO extends DAO {
 			// 2. 오라클 접속
 			con = DB.getConnection();
 			// 3. sql 문 - 아래 LIST
-			System.out.println("sql : " + TOTALROW + getSearch(pageObject));
+			// 전체 데이터 개수 쿼리인 경우 조건이 있으면 where를 붙혀라 : true
+			System.out.println("sql : " + TOTALROW + getSearch(pageObject, true));
 			// 4. 실행 객체 선언
-			pstmt = con.prepareStatement(TOTALROW + getSearch(pageObject));
+			pstmt = con.prepareStatement(TOTALROW + getSearch(pageObject, true));
 			int idx = 0;
 			idx = setSearchData(pageObject, pstmt, idx);
 			// 5. 실행 객체 실행
@@ -293,14 +294,16 @@ public class ImageDAO extends DAO {
 			// 5. 실행 객체 실행
 			result = pstmt.executeUpdate();
 			// 6. 데이터 표시 또는 담기
-			System.out.println();
-			System.out.println(result + "개 글 삭제 성공");
+			if(result == 0) {
+				System.out.println("글 번호가 존재하지 않거나 본인 게시글이 아닙니다.");
+			} else {
+				System.out.println();
+				System.out.println(result + "개 글 삭제 성공");
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			// 특별한 예외는 그냥 전달한다.
-			if (result == 0)
-				; // 오류 나면 던진다
 			// 그 외 처리 중 나타나는 오류에 대해서 사용자가 볼 수 잇는 예외로 만들어 전달한다.
 			throw new Exception("예외 발생 : 이미지 삭제 DB 처리 중 예외가 발생했습니다.");
 		} finally {
@@ -364,7 +367,7 @@ public class ImageDAO extends DAO {
 					+ " from ( " + " select i.no, i.title, i.id, m.name, to_char(i.writeDate, 'yyyy-mm-dd') writeDate, "
 							+ " i.fileName, i.hit "
 							+ " from image i, member m "
-							+ " where i.id = m.id ";
+							+ " where 1=1 ";
 			// 여기에 검색이 있어야 한다.
 
 	// 검색이 있는 경우 TOTALROW + search
@@ -374,8 +377,9 @@ public class ImageDAO extends DAO {
 	private String getListSQL(PageObject pageObject) {
 		String sql = LIST;
 		String word	= pageObject.getWord();
-		if(word != null && !word.equals("")) 
-			sql += getSearch(pageObject);
+			// 검색 쿼리 추가 - where를 추가하지 않는다. : false
+			sql += getSearch(pageObject, false);
+			sql += " and (i.id = m.id) ";
 			sql += " order by no desc" + " ) "
 				+ " ) where rnum between ? and ? ";
 		
@@ -383,17 +387,22 @@ public class ImageDAO extends DAO {
 	}
 	
 	// 리스트의 검색만 처리하는 쿼리 - where
-	private String getSearch(PageObject pageObject) {
+	// list(), getTotalRow()에서 사용한다. list는 where 반드시 넣는다. 이미 있다.
+	// getTotalRow() where가 없다. 그래서 검색 잇는 경우 where 추가 해야 한다.
+	private String getSearch(PageObject pageObject, boolean isWhere) {
 		// where 뒤에 false를 붙힌다. 뒤에가 true 면 true
 		String sql = "";
 		String key = pageObject.getKey();
 		String word = pageObject.getWord();
 		// key 안에 t가 포함되어 있으면 title로 검생을 한다.
 		if(word != null && !word.equals("")) {
-			sql += " where 1=0 ";
+			// where 붙히기 처리
+			if(isWhere) sql += " where 1=1 ";
+			sql += " and ( 1=0 ";
 			if(key.indexOf("t") >= 0) sql += " or title like ? ";
 			if(key.indexOf("c") >= 0) sql += " or content like ? ";
-			if(key.indexOf("w") >= 0) sql += " or writer like ? ";
+			if(key.indexOf("f") >= 0) sql += " or fileName like ? ";
+			sql += " ) ";
 		}
 		return sql;
 	}
@@ -409,7 +418,7 @@ public class ImageDAO extends DAO {
 			// % + 데이터 + % -> like 연산자
 			if(key.indexOf("t") >= 0) pstmt.setString(++idx, "%" + word + "%");;
 			if(key.indexOf("c") >= 0) pstmt.setString(++idx, "%" + word + "%");;
-			if(key.indexOf("w") >= 0) pstmt.setString(++idx, "%" + word + "%");;
+			if(key.indexOf("f") >= 0) pstmt.setString(++idx, "%" + word + "%");;
 		}
 		return idx;
 	}

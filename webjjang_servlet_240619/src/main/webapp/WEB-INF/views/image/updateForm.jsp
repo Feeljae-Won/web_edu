@@ -58,13 +58,13 @@
 			<input type="hidden" name="key" value="${param.key }">
 			<input type="hidden" name="word" value="${param.word }">
 			<div class="form-group">
-				<label for="no"><b>번호</b></label> <input type="text" maxlength="100"
-					class="form-control" placeholder="제목 입력" id="no" name="no"
+				<label for="no"><b>번호</b></label> <input type="text"
+					class="form-control" id="no" name="no"
 					value=${vo.no } readonly>
 			</div>
 			<div class="form-group">
 				<label for="title"><b>제목</b></label> <input type="text"
-					maxlength="20" class="form-control" placeholder="제목 입력" id="title" required
+					maxlength="100" class="form-control" placeholder="제목 입력" id="title" required
 					name="title" value=${vo.title }>
 			</div>
 			<div class="form-group">

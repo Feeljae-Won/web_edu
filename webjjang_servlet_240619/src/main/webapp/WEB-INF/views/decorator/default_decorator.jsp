@@ -94,7 +94,9 @@ article {
 
 			<button class="navbar-toggler" type="button" data-toggle="collapse"
 				data-target="#collapsibleNavbar"
-			><span class="navbar-toggler-icon"></span></button>
+			>
+				<span class="navbar-toggler-icon"></span>
+			</button>
 			<div class="collapse navbar-collapse" id="collapsibleNavbar">
 				<ul class="navbar-nav">
 					<li class="nav-item ${( module == '/notice')?'active' : ''}">
@@ -132,8 +134,8 @@ article {
 					<c:if test="${ !empty login }">
 						<!-- 로그인 했을 때 -->
 						<li class="nav-link ">
-							<i class="material-icons"></i>
-							<b> ${login.name }(${login.gradeName })</b>님 안녕하세요.
+							<i class="material-icons"></i> <b> ${login.name }(${login.gradeName })</b>님
+							안녕하세요.
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" href="/member/logout.do">
@@ -142,18 +144,23 @@ article {
 						</li>
 						<div class="dropdown">
 							<button type="button" class="btn btn-primary dropdown-toggle"
-								data-toggle="dropdown">
+								data-toggle="dropdown"
+							>
 								<i class="fa fa-info-circle"></i> 마이페이지
 							</button>
 							<div class="dropdown-menu">
 								<a class="dropdown-item" href="/member/view.do">
-									<i class="fa fa-drivers-license-o"></i> 내 정보 보기</a>
+									<i class="fa fa-drivers-license-o"></i> 내 정보 보기
+								</a>
 								<a class="dropdown-item" href="/cart/list.do">
-									<i class="fa fa-shopping-cart"></i> 장바구니</a>
+									<i class="fa fa-shopping-cart"></i> 장바구니
+								</a>
 								<a class="dropdown-item" href="/order/list.do">
-									<i class="fa fa-truck"></i> 주문상세</a>
+									<i class="fa fa-truck"></i> 주문상세
+								</a>
 								<a class="dropdown-item" href="/member/delete.do">
-									<i class="fa fa-user-times"></i> 회원탈퇴</a>
+									<i class="fa fa-user-times"></i> 회원탈퇴
+								</a>
 							</div>
 						</div>
 					</c:if>

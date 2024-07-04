@@ -43,7 +43,7 @@ public class Init {
 	// dao 생성해서 저장하는 객체 - <className, dao>
 	private static Map<String, DAO> daoMap = new HashMap<>();
 
-	// static 버녀수에 데이터를 초기화 시키는 1번만 실행되는 블록 - class가 불려지면 자동 실행
+	// static 변수에 데이터를 초기화 시키는 1번만 실행되는 블록 - class가 불려지면 자동 실행
 	static {
 		// ------------[일반 게시판 객체 생성과 조립] ------------------
 		// dao 생성

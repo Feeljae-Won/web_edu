@@ -10,6 +10,39 @@
 <title>이미지 게시판</title>
 <script type="text/javascript">
 	$(function() {
+
+		// 이미지 사이즈 조정 4:3
+		let imgWidth = $(".imageDiv:first").width();
+		let imgHeight = $(".imageDiv:first").height();
+
+		console.log("img width : " + imgWidth);
+		console.log("img height : " + imgHeight);
+		
+		// 높이 계산 - 너비는 동일하다. : 이미지와 이미지를 감싸고 있는 div 태그의 높이로 사용
+		let height = imgWidth / 4 * 3;
+		
+		// 전체 imageDiv의 높이를 조정한다.
+		$(".imageDiv").height(height);
+		
+		// 이미지 배열로 처리하면 안된다. foreach 사용 - jQuery 사용할 때는 each() / - javascript = foreach
+		$(".imageDiv > img").each(function(idx, image) {
+// 			alert(image);
+			// 이미지가 계산된 높이 보다 크면 줄인다.
+			if($(image).height() > height) {
+				let image_width = $(image).width();
+				let image_height = $(image).height();
+				let width = height / $(image).height() * image_width;
+				
+				console.log("changed image width : " + width);
+				
+				// 이미지 높이 줄이기
+				$(image).height(height);
+				// 이미지 너비 줄이기
+				$(image).width(width);
+			}
+		});
+		
+
 		// 이벤트 처리
 		$(".dataRow").click(
 				function() {
@@ -36,7 +69,7 @@
 
 <style type="text/css">
 .dataRow:hover {
-	opacity:80%;
+	opacity: 80%;
 	cursor: pointer;
 }
 
@@ -54,6 +87,13 @@ button:hover {
 
 #footer {
 	background: black;
+}
+
+.imageDiv {
+	background: black;
+}
+
+.title {
 }
 </style>
 <script type="text/javascript">
@@ -82,13 +122,11 @@ button:hover {
 					<div class="input-group mb-8">
 						<div class="input-group-prepend">
 							<select name="key" id="key" class="form-control">
-								<option select value="t">제목</option>
+								<option value="tcf">모두</option>
+								<option value="t">제목</option>
 								<option value="c">내용</option>
-								<option value="w">작성자</option>
 								<option value="tc">제목 + 내용</option>
-								<option value="tw">제목 + 작성자</option>
-								<option value="cw">내용 + 작성자</option>
-								<option value="tcw">모두</option>
+								<option value="f">파일명</option>
 							</select>
 						</div>
 						<input type="text" class="form-control" placeholder="검색" id="word"
@@ -139,25 +177,27 @@ button:hover {
 					<!-- 줄바꿈처리 - 찍는 인덱스 번호가 3의 배수이면 줄바꿈을 한다. -->
 					<c:if test="${(vs.index != 0) && (vs.index % 3 == 0) }">
 						${ "</div>" }
-						<p>
-						${ "<div class='row'>" }
+						<p>${ "<div class='row'>" }
 					</c:if>
 					<!-- 데이터 표시 시작 -->
 					<div class="col-md-4 dataRow">
 						<div class="card text-dark" style="width: 100%;">
-							<img class="card-img-top" src="${vo.fileName }" alt="image"
-								style="width: 100%">
-							<div class="card-body">
-									<span class="float-right">${vo.hit }</span>
-								<strong class="card-title">
-									<span class="no">${vo.no }</span>. ${vo.title }
+							<div class="imageDiv text-center align-content-center">
+								<img class="card-img-top" src="${vo.fileName }" alt="image"
+									style="width: 100%"
+								>
+							</div>
+							<div class="card-body text-truncate title">
+								<span class="float-right">${vo.hit }</span> <strong
+									class="card-title"
+								> <span class="no">${vo.no }</span>. <span>${vo.title }</span>
 								</strong>
 								<p>
 								<p class="card-text">
-									<span class="float-right">${vo.writeDate }</span>
-									${vo.name }(${vo.id })
+									<span class="float-right">${vo.writeDate }</span> ${vo.name }(${vo.id })
 								</p>
 							</div>
+
 						</div>
 					</div>
 					<!-- 데이퍼 표시 끝 -->
@@ -168,14 +208,15 @@ button:hover {
 		<hr>
 		<!-- container footer -->
 		<div>
-		<!-- 로그인이 되어 있으면 보이게 하자 -->
-		<c:if test="${ !empty login }">
-			<a href="writeForm.do?perPageNum=${pageObject.perPageNum }">
-				<button class="btn btn-light float-left">
-					<b>등록</b>
-				</button>
-			</a>
-		</c:if>
+			<!-- 리스트 데이터 표시의 끝 -->
+			<!-- 로그인이 되어 있으면 보이게 하자 -->
+			<c:if test="${ !empty login }">
+				<a href="writeForm.do?perPageNum=${pageObject.perPageNum }">
+					<button class="btn btn-light float-left">
+						<b>등록</b>
+					</button>
+				</a>
+			</c:if>
 		</div>
 
 		<!-- 페이지 네이션 -->

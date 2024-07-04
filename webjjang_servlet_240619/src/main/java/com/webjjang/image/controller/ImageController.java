@@ -200,27 +200,36 @@ public class ImageController {
 			case "/image/delete.do":
 				System.out.println("5. 이미지 게시판 글 삭제");
 				
-				// 데이터 수집 - DB에서 실행에 필요한 데이터 - 글 번호, 비밀번호 - ImageVO
+				// 데이터 수집 - DB에서 실행에 필요한 데이터 - 글 번호, 아이디(session) - ImageVO
 				ImageVO deleteVO = new ImageVO();
 				no = Long.parseLong(request.getParameter("no"));
+				
+				
 				deleteVO.setNo(no);
 				deleteVO.setId(id);
 				
 				// DB 처리
 				result = (int) Execute.execute(Init.get(uri),deleteVO);
 				
-//				// 페이지 정보 받기 & uri에 붙이기
-//				pageObject = PageObject.getInstance(request);
-//				System.out.println(pageObject);
-				
-				jsp = "redirect:list.do" + "?perPageNum=" + request.getParameter("perPageNum");
-				
 				if((int) result == 1) {
 					session.setAttribute("msg", "글 삭제가 성공적으로 처리 되었습니다.");
 				} else {
 					session.setAttribute("msg", "글 삭제가 처리되지 않았습니다. [비밀번호가 틀립니다.]");
 				}
+				
+//				// 페이지 정보 받기 & uri에 붙이기
+				jsp = "redirect:list.do" + "?perPageNum=" + request.getParameter("perPageNum");
+				
+				// 파일 삭제
+				// 삭제할 파일 이름
+				String deleteFileName = request.getParameter("deleteFileName");
+				File deleteFile = new File(request.getServletContext().getRealPath(deleteFileName));
+				
+				// 파일 삭제 처리
+				if(deleteFile.exists()) deleteFile.delete();
+				
 				break;
+				
 				
 			case "/image/changeImage.do":
 				System.out.println("6. 이미지 변경 처리");
@@ -236,7 +245,7 @@ public class ImageController {
 				no = Long.parseLong(multi.getParameter("no"));
 				fileName = multi.getFilesystemName("imageFile");
 				
-				String deleteFileName = multi.getParameter("deleteFileName");
+				deleteFileName = multi.getParameter("deleteFileName");
 				System.out.println("ImageController.changeImage().changeImage() : " + deleteFileName);
 				
 				// 변수 - vo 저장하고 Service : DB에 처리할 데이터만.
@@ -248,7 +257,7 @@ public class ImageController {
 				Execute.execute(Init.get(uri), vo);
 				
 				// 지난 이미지 파일은 존재하면 지운다.
-				File deleteFile = new File(request.getServletContext().getRealPath(deleteFileName));
+				deleteFile = new File(request.getServletContext().getRealPath(deleteFileName));
 				if (deleteFile.exists()) deleteFile.delete();
 				
 				// 페이지 정보 받기 & uri에 붙이기

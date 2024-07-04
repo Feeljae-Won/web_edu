@@ -16,9 +16,7 @@ private ImageDAO dao;
 	
 	@Override
 	public Integer service(Object obj) throws Exception {
-		
-		// DB image에서 조회수 1증가 하고 글보기 데이터 가져와서 리턴
-		
+		// DB 처리는 DAO에서 처리 - ImageDAO.delete()
 		
 		return dao.delete((ImageVO)obj);
 

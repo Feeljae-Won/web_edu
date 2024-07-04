@@ -18,19 +18,11 @@
 
 		// 이벤트 처리
 		$("#deleteBtn").click(function() {
-			$("#deleteModal").modal("show");
+			// js 경고창 - alert : 일반 경고 / confirm : 확인, 취소 / prompt : 키인
+			// 확인 창이 나타나는데 취소 버트느을 누르면 삭제 페이지 이동을 취소시킨다.
+			if(!confirm("정말 삭제하시겠습니까? 삭제하면 복구할 수 없습니다.")) return false;
 		});
-		// deleteDiv의 삭제 버튼 처리
-		$("#deleteForm").submit(function() {
-			console.log("updateForm - submit Event ---------")
-		});
-		// deleteDiv의 취소 버튼 처리
-		$("#deleteCancelBtn").click(function() {
-			console.log("writeForm 취소버튼 - Click Event ---------")
-			$("#pw").val("");
-			$("#deleteModal").modal("hide");
-			$("#deleteBtn").attr("disabled", false);
-		});
+		
 		// updateBtn 처리
 		$('[data-toggle="tooltip"]').tooltip();   
 
@@ -49,7 +41,7 @@
 		</h2>
 		<p>
 		<div class="float-right">
-			<c:if test="${login.id == vo.id }">
+			<c:if test="${ !empty login && login.id == vo.id }">
 				<a
 					href="/image/updateForm.do?no=${vo.no}&title=${vo.title}&content=${vo.content}&id=${vo.id}&fileName=${vo.fileName }
 				&page=${param.page}&perPageNum=${param.perPageNum}&key=${param.key}&word=${param.word}"
@@ -58,11 +50,10 @@
 				>
 					<b>Update</b>
 				</a>
-				<!-- 			<button class="btn btn-danger" id="deleteBtn"><b>Delete</b></button> -->
-				<!-- 삭제 버튼 Modal 적용 -->
-				<button type="button" class="btn btn-danger" id="deleteBtn">
+				<a href="delete.do?no=${vo.no }&deleteFileName=${vo.fileName}&perPageNum=${param.perPageNum}" 
+					class="btn btn-danger" id="deleteBtn">
 					<b>Delete</b>
-				</button>
+				</a>
 			</c:if>
 
 			<a
@@ -114,44 +105,6 @@
 
 	</div>
 	<!-- 컨테이너 끝 -->
-
-	<!-- The Modal -->
-	<div class="modal fade" id="deleteModal">
-		<div class="modal-dialog modal-dialog-centered">
-			<div class="modal-content">
-
-				<!-- Modal Header -->
-				<div class="modal-header">
-					<h4 class="modal-title">이미지 글 삭제</h4>
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-				</div>
-
-				<!-- Modal body -->
-				<div class="modal-body">
-					정말 삭제하시겠습니까?<br> 삭제하면 게시글을 복구할 수 없습니다.
-				</div>
-
-				<!-- Modal footer -->
-				<div class="modal-footer">
-					<form action="delete.do" method="post" id="deleteForm">
-						<input type="hidden" name="page" value="${param.page }">
-						<input type="hidden" name="perPageNum"
-							value="${param.perPageNum }"
-						>
-						<input type="hidden" name="key" value="${param.key }">
-						<input type="hidden" name="word" value="${param.word }">
-						<input type="hidden" name="no" value="${vo.no }">
-
-						<button class="btn btn-danger" id="lastDelete">Delete</button>
-						<button type="button" class="btn btn-secondary"
-							data-dismiss="modal" id="deleteCancelBtn"
-						>Close</button>
-					</form>
-				</div>
-
-			</div>
-		</div>
-	</div>
 
 	<!-- The Modal -->
 	<div class="modal" id="changeImageModal">
