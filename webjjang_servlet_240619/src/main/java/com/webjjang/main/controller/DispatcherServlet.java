@@ -65,8 +65,10 @@ public class DispatcherServlet extends HttpServlet {
 		int pos = uri.indexOf("/", 1);
 		
 		// 2번째 /가 없으면 (-1) == 404.error
+		// 모듈 자체가 없는 경우 404.jsp로 보낸다.
 		if(pos == -1) {
-			request.getRequestDispatcher("/WEB-INF/views/error/404.jsp").forward(request, response);
+			request.setAttribute("uri", request.getRequestURI());
+			request.getRequestDispatcher("/WEB-INF/views/error/noModule_404.jsp").forward(request, response);
 			return;
 		}
 		
@@ -102,8 +104,9 @@ public class DispatcherServlet extends HttpServlet {
 			break;
 
 		default:
-			request.getRequestDispatcher("/WEB-INF/views/error/404.jsp").forward(request, response);
-			break;
+			request.setAttribute("uri", request.getRequestURI());
+			request.getRequestDispatcher("/WEB-INF/views/error/noModule_404.jsp").forward(request, response);
+			return;
 		} // end of switch
 		// jsp 정보 앞에 "redirect:"이 붙어 있으면 redirect 시킨다. (페이지 자동 이동)
 		// jsp 정보 앞에 "redirect:"이 붙어 있지 않으면 jsp로 forward 시킨다. (페이지 자동 이동)
@@ -117,4 +120,4 @@ public class DispatcherServlet extends HttpServlet {
 		} // end of if
 	} // end of service
 
-}
+} // end of DispatcherServlet();

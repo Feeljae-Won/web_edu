@@ -209,14 +209,12 @@ button:hover {
 		<!-- container footer -->
 		<div>
 			<!-- 리스트 데이터 표시의 끝 -->
-			<!-- 로그인이 되어 있으면 보이게 하자 -->
-			<c:if test="${ !empty login }">
-				<a href="writeForm.do?perPageNum=${pageObject.perPageNum }">
-					<button class="btn btn-light float-left">
-						<b>등록</b>
-					</button>
-				</a>
-			</c:if>
+			<!-- 로그인이 되어 있으면 보이게 하자 - authorityFilter에서 권한 처리 -->
+			<a href="writeForm.do?perPageNum=${pageObject.perPageNum }">
+				<button class="btn btn-light float-left">
+					<b>등록</b>
+				</button>
+			</a>
 		</div>
 
 		<!-- 페이지 네이션 -->

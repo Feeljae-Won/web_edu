@@ -177,7 +177,7 @@ public class BoardDAO extends DAO {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw e; // 오류 나면 던진다
+			throw new Exception("예외 발생 : 일반 게시판 글보기 DB 처리 중 오류 발생"); // 오류 나면 던진다
 		} finally {
 			// 7. 닫기
 			DB.close(con, pstmt, rs);

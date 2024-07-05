@@ -11,7 +11,7 @@
 	<div class="container">
 		<div class="card bg-dark text-white">
 			<div class="card-header">
-				<h4>interYard</h4>
+				<h4>Log-In</h4>
 				<b>가입하신 정보로 로그인 해 주세요.</b>
 			</div>
 			<form action="login.do" method="post">

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -48,7 +49,8 @@
 
 	<%-- 	글 번호 : ${param.no } 조회수 : ${param.inc } --%>
 	<div class="container p-3 my-3 bg-primary text-white"
-		style="border-radius: 10px 10px 10px 10px; hieght: 200px;">
+		style="border-radius: 10px 10px 10px 10px; hieght: 200px;"
+	>
 		<h2>
 			<i class="material-icons">chrome_reader_mode</i> Board View
 		</h2>
@@ -57,17 +59,23 @@
 			<a
 				href="/board/updateForm.do?no=${vo.no}&title=${vo.title}&content=${vo.content}&writer=${vo.writer}
 				&page=${param.page}&perPageNum=${para.perPageNum}&key=${param.key}&word=${param.word}"
-				class="btn btn-light"><b>Update</b></a>
+				class="btn btn-light"
+			>
+				<b>Update</b>
+			</a>
 			<!-- 			<button class="btn btn-danger" id="deleteBtn"><b>Delete</b></button> -->
 			<!-- 삭제 버튼 Modal 적용 -->
 			<button type="button" class="btn btn-danger" id="deleteBtn">
 				<b>Delete</b>
 			</button>
 
-			<a href="list.do?page=${param.page}&perPageNum=${para.perPageNum}&key=${param.key}&word=${param.word}">
-			<button type="button" class="btn btn-secondary cancelBtn">
-				<b>list</b>
-			</button></a>
+			<a
+				href="list.do?page=${param.page}&perPageNum=${para.perPageNum}&key=${param.key}&word=${param.word}"
+			>
+				<button type="button" class="btn btn-secondary cancelBtn">
+					<b>list</b>
+				</button>
+			</a>
 
 			<!-- 			<div id="deleteDiv"> -->
 			<!-- 				<form action="delete.jsp" method="post" id="deleteForm"> -->
@@ -81,18 +89,20 @@
 			<!-- 				</form> -->
 			<!-- 			</div> -->
 		</div>
-			<i class="fa fa-caret-right"></i> 일반 게시판 상세보기
+		<i class="fa fa-caret-right"></i> 일반 게시판 상세보기
 		<p>
 		<hr>
 		<table class="table"
-			style="text-align: center; border-radius: 10px; border-style: hidden;">
+			style="text-align: center; border-radius: 10px; border-style: hidden;"
+		>
 			<thead class="thead-dark">
 				<tr>
 					<th class="thead-dark" style="border-radius: 10px 0px 0px 0px;">번호</th>
 					<td class="dataRow table-light">${vo.no }</td>
 					<th class="thead-dark">제목</th>
 					<td class="dataRow table-light" colspan="10"
-						style="border-radius: 0px 10px 0px 0px;">${vo.title }</td>
+						style="border-radius: 0px 10px 0px 0px;"
+					>${vo.title }</td>
 				</tr>
 			<thead class="thead-dark">
 				<tr>
@@ -106,19 +116,21 @@
 			<thead class="thead-dark">
 				<tr>
 					<td colspan="12" class="dataRow table-light"
-						style="height: 500px; text-align: left; border-radius: 0px 0px 10px 10px;"><pre>${vo.content}</pre></td>
+						style="height: 500px; text-align: left; border-radius: 0px 0px 10px 10px;"
+					><pre>${vo.content}</pre></td>
 				</tr>
 			</thead>
 		</table>
 		<hr>
 
-	<!-- 댓글 처리 시작 -->
-	<jsp:include page="reply.jsp"/>
-	<!-- 댓글 처리 끝 -->
+		<!-- 댓글 처리 시작 -->
+		<jsp:include page="reply.jsp" />
+		<!-- 댓글 처리 끝 -->
 
 
-	</div> <!-- 컨테이너 끝 -->
-	
+	</div>
+	<!-- 컨테이너 끝 -->
+
 	<!-- The Modal -->
 	<div class="modal fade" id="deleteModal">
 		<div class="modal-dialog modal-dialog-centered">
@@ -139,24 +151,29 @@
 				<div class="modal-footer">
 					<form action="delete.do" method="post" id="deleteForm">
 						<input type="hidden" name="page" value="${param.page }">
-						<input type="hidden" name="perPageNum" value="${param.perPageNum }">
+						<input type="hidden" name="perPageNum"
+							value="${param.perPageNum }"
+						>
 						<input type="hidden" name="key" value="${param.key }">
 						<input type="hidden" name="word" value="${param.word }">
-						
-						<input type="hidden" name="no" value="${vo.no }"> <input
-							name="pw" type="password" required maxlength="20"
+
+						<input type="hidden" name="no" value="${vo.no }">
+						<input name="pw" type="password" required maxlength="20"
 							pattern="^.{3,20}$" id="pw" title="3~20자 입력 가능"
 							placeholder="본인 확인용 비밀번호"
-							style="padding: 5px; border-radius: 5px;">
+							style="padding: 5px; border-radius: 5px;"
+						>
 						<button class="btn btn-danger" id="lastDelete">Delete</button>
 						<button type="button" class="btn btn-secondary"
-							data-dismiss="modal" id="deleteCancelBtn">Close</button>
+							data-dismiss="modal" id="deleteCancelBtn"
+						>Close</button>
 					</form>
 				</div>
 
 			</div>
 		</div>
 	</div>
+
 
 </body>
 </html>
