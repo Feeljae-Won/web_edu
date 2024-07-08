@@ -24,7 +24,9 @@ import com.webjjang.image.service.ImageWriteService;
 import com.webjjang.main.dao.DAO;
 import com.webjjang.main.service.Service;
 import com.webjjang.member.dao.MemberDAO;
+import com.webjjang.member.service.MemberCheckIdService;
 import com.webjjang.member.service.MemberLoginService;
+import com.webjjang.member.service.MemberWriteService;
 import com.webjjang.notice.dao.NoticeDAO;
 import com.webjjang.notice.service.NoticeDeleteService;
 import com.webjjang.notice.service.NoticeListService;
@@ -103,9 +105,13 @@ public class Init {
 		
 		// service 생성
 		serviceMap.put("/member/login.do", new MemberLoginService());
+		serviceMap.put("/ajax/checkId.do", new MemberCheckIdService());
+		serviceMap.put("/member/write.do", new MemberWriteService());
 		
 		// 조립
 		serviceMap.get("/member/login.do").setDAO(daoMap.get("memberDAO"));
+		serviceMap.get("/ajax/checkId.do").setDAO(daoMap.get("memberDAO"));
+		serviceMap.get("/member/write.do").setDAO(daoMap.get("memberDAO"));
 		
 		// ------------[Member 객체 생성과 조립] ------------------
 		// dao 생성

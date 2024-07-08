@@ -81,7 +81,7 @@ public class ImageController {
 				
 				
 			case "/image/view.do":
-				System.out.println("2.일반게시판 글보기");
+				System.out.println("2.이미지 게시판 상세보기");
 				// 1. 조회수 1증가(글보기), 2. 일반게시판 글보기 데이터 가져오기 : 글보기, 수정할 때
 				// 넘어 오는 글 번호와 조회수 수집 한다. (데이터는 request 안에 들어 있다.)
 				no = Long.parseLong(request.getParameter("no"));

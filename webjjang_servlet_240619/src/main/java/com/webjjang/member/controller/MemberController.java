@@ -5,6 +5,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.oreilly.servlet.MultipartRequest;
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import com.webjjang.board.service.BoardDeleteService;
 import com.webjjang.board.service.BoardListService;
 import com.webjjang.board.service.BoardUpdateService;
@@ -13,6 +15,7 @@ import com.webjjang.board.service.BoardWriteService;
 import com.webjjang.board.vo.BoardVO;
 import com.webjjang.main.controller.Init;
 import com.webjjang.member.vo.LoginVO;
+import com.webjjang.member.vo.MemberVO;
 import com.webjjang.util.exe.Execute;
 import com.webjjang.util.io.BoardPrint;
 import com.webjjang.util.io.In;
@@ -39,6 +42,15 @@ public class MemberController {
 		// 메뉴 입력 - uri - /member/list.do
 		String uri = request.getRequestURI();
 		
+		// 파일 업로드 설정 --------------------------------------
+		// 파일의 상대적인 저장 위치
+		String savePath = "/upload/image";
+		// 파일 시스템에서는 절대 저장위치가 필요하다. - 파일 업로드 시 필요
+		String realSavePath = request.getServletContext().getRealPath(savePath);
+		
+		// 업로드 파일 용량 제한(100mb)
+		int sizeLimit = 100 * 1024 * 1024;
+
 		Object result = null;
 		
 		// 입력 받는 데이터 선언
@@ -141,7 +153,85 @@ public class MemberController {
 				
 				jsp = "board/view";
 				break;
+				
+			case "/member/writeForm.do":
+				System.out.println("c. 회원가입 폼 폼으로 이동");
+				jsp = "member/writeForm";
+				break;
+				
+			case "/member/write.do":
+				System.out.println("c-1. 회원 등록 처리");
+				
+				MultipartRequest multi = 
+						new MultipartRequest(request, realSavePath, sizeLimit, "utf-8", new DefaultFileRenamePolicy());
+				
+				// 데이터 수집 - 사용자 -> 서버 : form - input - name
+				id = multi.getParameter("id");
+				pw = multi.getParameter("pw");
+				String name = multi.getParameter("name");
+				String gender = multi.getParameter("gender");
+				String birth = multi.getParameter("birth");
+				String tel = multi.getParameter("tel");
+				String email = multi.getParameter("email");
+				String photo = multi.getParameter("photo");
+				
+				
+				// null 인 경우 처리
+				if (photo == null) {
+					photo = "upload/noImage.jpg";
+				}
+				
+				// 변수 - vo 저장하고 Service
+				MemberVO vo = new MemberVO();
+				vo.setId(id);
+				vo.setPw(pw);
+				vo.setName(name);
+				vo.setGender(gender);
+				vo.setBirth(birth);
+				vo.setTel(tel);
+				vo.setEmail(email);
+				vo.setPhoto(photo);
+				
+				// [BoardController] - BoardWriteService - BoardDAO.writer(vo)
+				result = Execute.execute(Init.get(uri), vo);
+				
+//				// 페이지 정보 받기 & uri에 붙이기
+//				pageObject = PageObject.getInstance(request);
+//				System.out.println(pageObject);
+				
+				// jsp 정보 앞에 "redirect:"가 붙어 있으면 redirect를 
+				// 아니면 jsp로 forword를 시킨다.
+				jsp = "redirect:/board/list.do";
+				
+				// 처리 메시지
+				session.setAttribute("msg", "회원 가입이 정상 처리 되었습니다.");
+				
+				break;
 			
+			case "/member/checkId.do":
+				System.out.println("d. 아이디 중복 체크 처리");
+				
+				// 데이터 수집 - 사용자 -> 서버 : form - input - name
+				// JSP 에서 사용자가 입력한 아이디
+				id = request.getParameter("id");
+				
+				// [MemberController] - MemberCheckIdService - MemberDAO.checkId("id")
+				// 리턴 타입이 Object라서 String으로 캐스팅 한다.
+				// DB 서버에서 가져온 아이디 - 덮어쓰기
+				id = (String) Execute.execute(Init.get(uri), id);
+				
+				// DB 에서 받아온 데이터를 request에 담는다.
+				request.setAttribute("id", id);
+				
+				// jsp 정보 앞에 "redirect:"가 붙어 있으면 redirect를 
+				// 아니면 jsp로 forword를 시킨다.
+				jsp = "/member/checkId";
+				
+				// 처리 메시지
+				session.setAttribute("msg", "글 등록이 성공적으로 처리 되었습니다.");
+				
+				break;
+				
 			case "/member/updateForm.do":
 				System.out.println("4-1. 글수정 폼으로 이동");
 				// 사용자가 -> 서버 : 글번호 데이터 수집
