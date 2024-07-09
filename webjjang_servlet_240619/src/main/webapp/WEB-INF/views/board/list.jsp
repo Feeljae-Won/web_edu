@@ -67,15 +67,14 @@ button:hover {
 </script>
 </head>
 <body>
-
-	<div class="container p-3 my-3 bg-primary text-white"
+	<div class="jumbotron jumbotron-fluid">
+		<div class="container">
+			<h1>Board List</h1>
+			<p>Board List &amp; Write Your Story</p>
+		</div>
+	</div>
+	<div class="container p-3 my-3 bg-dark text-white"
 		style="border-radius: 10px 10px 10px 10px; hieght: 200px;">
-		<h2>
-			<i class="fa fa-caret-right"></i> Board List
-		</h2>
-		<p>
-			<i class="fa fa-caret-right"></i> 일반 게시판 리스트
-		</p>
 		<form action="list.do">
 			<div class="row">
 				<div class="col-sm-8">

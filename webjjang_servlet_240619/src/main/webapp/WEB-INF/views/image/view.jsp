@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>일반 게시판 글보기</title>
+<title>이미지 게시판 글보기</title>
 <style type="text/css">
 #deleteDiv {
 	display: none;
@@ -31,15 +31,16 @@
 
 </head>
 <body>
-
+	<div class="jumbotron jumbotron-fluid">
+		<div class="container">
+			<h1>Gallery View</h1>
+			<p>Show your Experience</p>
+		</div>
+	</div>
 	<%-- 	글 번호 : ${param.no } 조회수 : ${param.inc } --%>
-	<div class="container p-3 my-3 bg-primary text-white"
+	<div class="container p-3 my-3 bg-dark text-white"
 		style="border-radius: 10px 10px 10px 10px; hieght: 200px;"
 	>
-		<h2>
-			<i class="material-icons">chrome_reader_mode</i> Image View
-		</h2>
-		<p>
 		<div class="float-right">
 			<c:if test="${ !empty login && login.id == vo.id }">
 				<a
@@ -64,7 +65,7 @@
 				</button>
 			</a>
 		</div>
-		<i class="fa fa-caret-right"></i> 이미지 게시판 상세보기
+		<i class="fa fa-caret-right"></i> <b>${vo.no }. </b> ${vo.title }
 		<p>
 		<hr>
 		<div class="card text-dark">

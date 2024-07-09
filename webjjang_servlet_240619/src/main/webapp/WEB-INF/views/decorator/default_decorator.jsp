@@ -5,40 +5,28 @@
 
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"
-%>
-<%@taglib prefix="decorator"
-	uri="http://www.opensymphony.com/sitemesh/decorator"
-%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="decorator"
+	uri="http://www.opensymphony.com/sitemesh/decorator"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>웹짱 : <decorator:title />
-</title>
-<!-- Bootstrap 4 + jquery 라이브러리 등록 -CDN 방식 -->
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
->
-<script
-	src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"
-></script>
-<script
-	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
-></script>
-<script
-	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
-></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<!-- 개발자 작성한 title을 가져 다 사용 -->
+	<title>
+		interYard:<decorator:title />
+	</title>
+  <!-- Bootstrap 4 + jquery 라이브러리 등록 - CDN 방식 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- 아이콘 링크 등록 font awesome4, google -->
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
->
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-	rel="stylesheet"
->
+<!-- icon 라이브러리 등록 - Font Awesome 4 / google -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 <style type="text/css">
 pre {
@@ -88,7 +76,7 @@ article {
 </head>
 <body>
 	<header>
-		<nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+		<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
 			<a class="navbar-brand active" href="main.do">
 				<i><b>i</b>nter<b>Yard</b></i>
 			</a>
@@ -112,9 +100,14 @@ article {
 					<li class="nav-item ${( module == '/image')?'active' : ''}">
 						<a class="nav-link" href="/image/list.do">Gallery</a>
 					</li>
-					<li class="nav-item" ${( module == '/qna_board')?'active' : ''}>
+					<li class="nav-item ${( module == '/qna_board')?'active' : ''}">
 						<a class="nav-link" href="/qna_board/list.do">QnA</a>
 					</li>
+					<c:if test="${!empty login && login.gradeNo == 9 }">
+						<li class="nav-item ${( module == '/member')?'active' : ''}">
+							<a class="nav-link" href="/member/list.do">Member</a>
+						</li>
+					</c:if>
 				</ul>
 			</div>
 			<div class="float-right">
@@ -135,6 +128,13 @@ article {
 					<c:if test="${ !empty login }">
 						<!-- 로그인 했을 때 -->
 						<li class="nav-link ">
+							<c:if test="${empty login.photo }">
+								<i class="fa fa-user-circle"></i>
+							</c:if>
+							<c:if test="${!empty login.photo }">
+								<img src="${login.photo }" class="rounded-circle"
+									style="height:25px;">
+							</c:if>
 							<i class="material-icons"></i> <b> ${login.name }(${login.gradeName })</b>님
 							안녕하세요.
 						</li>
@@ -144,7 +144,7 @@ article {
 							</a>
 						</li>
 						<div class="dropdown">
-							<button type="button" class="btn btn-primary dropdown-toggle"
+							<button type="button" class="btn btn-light dropdown-toggle"
 								data-toggle="dropdown"
 							>
 								<i class="fa fa-info-circle"></i> 마이페이지
@@ -178,37 +178,39 @@ article {
 	</footer>
 
 	<c:if test="${ !empty msg }">
-		<!-- msg를 표시할 modal 창 -->
-		<div class="modal text-dark" id="msgModal">
-			<div class="modal-dialog">
-				<div class="modal-content">
-
-					<!-- Modal Header -->
-					<div class="modal-header">
-						<!-- 버튼에 따라서 제목을 수정해서 사용 - .text(제목) -->
-						<h4 class="modal-title">처리 결과 Modal</h4>
-						<button type="button" class="close" data-dismiss="modal">&times;</button>
-					</div>
-
-					<!-- Modal body -->
-					<div class="modal-body">${msg }</div>
-
-					<!-- Modal footer -->
-					<div class="modal-footer"></div>
-
-				</div>
-			</div>
-		</div>
-		<!-- modal을 보이게 하는 javascript -->
-		<script type="text/javascript">
-			$(function() {
-				$("#msgModal").modal("show");
-			})
-		</script>
-	</c:if>
+      <!-- msg를 표시할 모달 창 -->
+      <!-- The Modal -->
+        <div class="modal fade" id="msgModal">
+          <div class="modal-dialog">
+               <div class="modal-content">
+         
+                 <!-- Modal Header -->
+                 <div class="modal-header">
+                      <h4 class="modal-title">처리 결과</h4>
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                 </div>
+           
+                 <!-- Modal body -->
+                 <div class="modal-body">
+                      ${msg }
+                 </div>
+           
+                 <!-- Modal footer -->
+                 <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                 </div>
+           
+               </div>
+          </div>
+        </div>
+      <!-- 모달을 보이게 하는 스크립트 -->
+      <script type="text/javascript">
+         $(function() {
+            $("#msgModal").modal("show");
+         });
+      </script>
+   </c:if>
 </body>
 </html>
 
-<%
-session.removeAttribute("msg");
-%>
+<% session.removeAttribute("msg"); %>

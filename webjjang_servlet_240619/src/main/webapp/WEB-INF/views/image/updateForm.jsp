@@ -41,11 +41,14 @@
 </script>
 </head>
 <body>
-
-	<br>
-	<div class="container p-3 my-3 bg-primary text-white"
+	<div class="jumbotron jumbotron-fluid">
+		<div class="container">
+			<h1>Gallery UpdateForm</h1>
+			<p>Show your Experience</p>
+		</div>
+	</div>
+	<div class="container p-3 my-3 bg-dark text-white"
 		style="border-radius: 10px 10px 10px 10px; hieght: 200px;">
-		<h2><i class="fa fa-pencil-square-o"></i> Image Update Form</h2>
 		<p><i class="fa fa-caret-right"></i> 이미지 게시글 수정</p>
 		<div class="alert alert-danger">
    			 <strong>이미지를 제외한 나머지 텍스트 데이터를 수정합니다.</strong><br>

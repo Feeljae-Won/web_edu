@@ -1,5 +1,6 @@
 package com.webjjang.member.controller;
 
+import java.io.File;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -7,20 +8,12 @@ import javax.servlet.http.HttpSession;
 
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
-import com.webjjang.board.service.BoardDeleteService;
-import com.webjjang.board.service.BoardListService;
-import com.webjjang.board.service.BoardUpdateService;
-import com.webjjang.board.service.BoardViewService;
-import com.webjjang.board.service.BoardWriteService;
 import com.webjjang.board.vo.BoardVO;
 import com.webjjang.main.controller.Init;
 import com.webjjang.member.vo.LoginVO;
 import com.webjjang.member.vo.MemberVO;
 import com.webjjang.util.exe.Execute;
-import com.webjjang.util.io.BoardPrint;
-import com.webjjang.util.io.In;
 import com.webjjang.util.page.PageObject;
-import com.webjjang.util.page.ReplyPageObject;
 
 // Member Module 에 맞는 메뉴 선택 , 데이터 수집(기능별), 예외 처리
 public class MemberController {
@@ -44,12 +37,15 @@ public class MemberController {
 		
 		// 파일 업로드 설정 --------------------------------------
 		// 파일의 상대적인 저장 위치
-		String savePath = "/upload/image";
+		String savePath = "/upload/member";
 		// 파일 시스템에서는 절대 저장위치가 필요하다. - 파일 업로드 시 필요
 		String realSavePath = request.getServletContext().getRealPath(savePath);
-		
 		// 업로드 파일 용량 제한(100mb)
 		int sizeLimit = 100 * 1024 * 1024;
+		
+		// realSavePath 존재하지 않으면 만들자
+		File realSavePathFile = new File(realSavePath);
+		if (!realSavePathFile.exists()) realSavePathFile.mkdirs();
 
 		Object result = null;
 		
@@ -107,51 +103,20 @@ public class MemberController {
 				break;
 			
 			
-			case "/member/list.do":
-				// [MemberController] - (Execute) - MemberListService - BoardDAO.list()
-				System.out.println("1.일반게시판 리스트");
-				// 페이지 처리를 위한 객체
-				// getInstance - 기본 값이 있고 넘어오는 페이지와 검색 정보를 세팅 처리
-				PageObject pageObject = PageObject.getInstance(request);
-				// DB 에서 데이터 가져오기 - 가져온 데이터는 LIST<BoardVO>
-				result = Execute.execute(Init.get(uri), pageObject);
-				
-				// pageObject 데이터 확인
-				System.out.println("BoardController.execute().pageObject : " + pageObject);
-				
-				// 가져온 데이터를 request에 저장 -> jsp 까지 전달 된다.
-				request.setAttribute("list", result);
-				// pageObject 담기
-				request.setAttribute("pageObject", pageObject);
-				// /WEB-INF/views/  + board/list  +  .jsp
-				jsp = "board/list";
-				break;
-				
+			
 				
 			case "/member/view.do":
-				System.out.println("2.일반게시판 글보기");
-				// 1. 조회수 1증가(글보기), 2. 일반게시판 글보기 데이터 가져오기 : 글보기, 수정할 때
+				System.out.println("2. 회원정보 보기 글보기");
+				
 				// 넘어 오는 글 번호와 조회수 수집 한다. (데이터는 request 안에 들어 있다.)
-				String strNo = request.getParameter("no");
-				String strInc = request.getParameter("inc");
-				no = Long.parseLong(strNo);
-				Long inc = Long.parseLong(strInc);
-				// 전달 데이터 - 글번호, 조회수 증가 여부(1 : 증가, 0: 증가 안함) : 배열 또는 Map
-				result = Execute.execute(Init.get(uri), new Long[] {no, inc});
+				id = login.getId();
+				// 전달 데이터 - id
+				result = Execute.execute(Init.get(uri), id);
 				
 				// 가져온 데이터를 JSP로 보내기 위해서 request에 담는다.
 				request.setAttribute("vo", result);
 				
-				// 댓글 페이지 객체
-				// 데이터 전달 - page / perPageNum / no / replyPage / replayPerPageNum
-				ReplyPageObject replyPageObject = ReplyPageObject.getInstance(request);
-				
-				// 가져온 댓글 데이터 request에 담기
-				request.setAttribute("replyList", Execute.execute(Init.get("/memberreply/list.do"), replyPageObject));
-				// 댓글 페이지 객체 담기
-				request.setAttribute("replyPageObject", replyPageObject);
-				
-				jsp = "board/view";
+				jsp = "member/view";
 				break;
 				
 			case "/member/writeForm.do":
@@ -160,8 +125,9 @@ public class MemberController {
 				break;
 				
 			case "/member/write.do":
-				System.out.println("c-1. 회원 등록 처리");
+				System.out.println("c-1. 회원 가입 처리");
 				
+				// 파일이 존재한다.
 				MultipartRequest multi = 
 						new MultipartRequest(request, realSavePath, sizeLimit, "utf-8", new DefaultFileRenamePolicy());
 				
@@ -173,13 +139,7 @@ public class MemberController {
 				String birth = multi.getParameter("birth");
 				String tel = multi.getParameter("tel");
 				String email = multi.getParameter("email");
-				String photo = multi.getParameter("photo");
-				
-				
-				// null 인 경우 처리
-				if (photo == null) {
-					photo = "upload/noImage.jpg";
-				}
+				String photo = multi.getFilesystemName("photoFile");
 				
 				// 변수 - vo 저장하고 Service
 				MemberVO vo = new MemberVO();
@@ -190,14 +150,13 @@ public class MemberController {
 				vo.setBirth(birth);
 				vo.setTel(tel);
 				vo.setEmail(email);
-				vo.setPhoto(photo);
+				// null 인 경우 처리
+				// 이미지가 있으면 세팅한다. 없으면 세팅하지 않는다.
+				if (!(photo == null || photo.equals("")))
+					vo.setPhoto(savePath + "/" + photo);
 				
-				// [BoardController] - BoardWriteService - BoardDAO.writer(vo)
-				result = Execute.execute(Init.get(uri), vo);
-				
-//				// 페이지 정보 받기 & uri에 붙이기
-//				pageObject = PageObject.getInstance(request);
-//				System.out.println(pageObject);
+				// [MemberController] - MemberWriteService - MemberDAO.writer(vo)
+				Execute.execute(Init.get(uri), vo);
 				
 				// jsp 정보 앞에 "redirect:"가 붙어 있으면 redirect를 
 				// 아니면 jsp로 forword를 시킨다.
@@ -232,27 +191,99 @@ public class MemberController {
 				
 				break;
 				
-			case "/member/updateForm.do":
-				System.out.println("4-1. 글수정 폼으로 이동");
-				// 사용자가 -> 서버 : 글번호 데이터 수집
-				no = Long.parseLong(request.getParameter("no"));
+			case "/member/list.do": // 관리자만 가능하다.
+				// [MemberController] - (Execute) - MemberListService - MemberDAO.list()
+				System.out.println("e. 회원 리스트");
+				// 페이지 처리를 위한 객체
+				// getInstance - 기본 값이 있고 넘어오는 페이지와 검색 정보를 세팅 처리
+				PageObject pageObject = PageObject.getInstance(request);
 				
-				// no에 맞는 데이터 가져오기 - DB - BoardViewSerivce
-				result = Execute.execute(Init.get("/member/view.do"), new Long[] {no, 0L});
+				// 아이디 세팅 - 관리자 계쩡은 제외시키기 위해서 => accepter
+				pageObject.setAccepter(id);
+				
+				// DB 에서 데이터 가져오기 - 가져온 데이터는 LIST<BoardVO>
+				result = Execute.execute(Init.get(uri), pageObject);
+				
+				// 가져온 데이터를 request에 저장 -> jsp 까지 전달 된다.
+				request.setAttribute("list", result);
+				// pageObject 담기
+				request.setAttribute("pageObject", pageObject);
+				// /WEB-INF/views/  + member/list  +  .jsp
+				jsp = "member/list";
+				break;
+				
+			case "/member/changeGrade.do":
+				System.out.println("d-3. 회원 등급 변경 처리");
+				
+				// 데이터 수집 - 사용자 -> 서버 : form - input - name
+				id = request.getParameter("id");
+				int gradeNo = Integer.parseInt(request.getParameter("gradeNo"));
+				
+				// 변수 - vo 저장하고 Service
+				vo = new MemberVO();
+				vo.setId(id);
+				vo.setGradeNo(gradeNo);
+				
+				// [MemberController] - MemberWriteService - MemberDAO.writer(vo)
+				Execute.execute(Init.get(uri), vo);
+				
+				// jsp 정보 앞에 "redirect:"가 붙어 있으면 redirect를 
+				// 아니면 jsp로 forword를 시킨다.
+				jsp = "redirect:/member/list.do";
+				
+				// 처리 메시지
+				session.setAttribute("msg", "회원 [ " + id + " ] 님의 등급이 " 
+						+ " 변경이 되었습니다.");
+				
+				break;
+				
+			case "/member/changeStatus.do":
+				System.out.println("d-4. 회원 상태 변경 처리");
+				
+				// 데이터 수집 - 사용자 -> 서버 : form - input - name
+				id = request.getParameter("id");
+				String status = request.getParameter("status");
+				
+				// 변수 - vo 저장하고 Service
+				vo = new MemberVO();
+				vo.setId(id);
+				vo.setStatus(status);
+				
+				// [MemberController] - MemberWriteService - MemberDAO.writer(vo)
+				Execute.execute(Init.get(uri), vo);
+				
+				// jsp 정보 앞에 "redirect:"가 붙어 있으면 redirect를 
+				// 아니면 jsp로 forword를 시킨다.
+				jsp = "redirect:/member/list.do";
+				
+				// 처리 메시지
+				session.setAttribute("msg", "회원 [ " + id + " ] 님의 상태가 " 
+						+ " 변경이 되었습니다.");
+				
+				break;
+				
+				
+			case "/member/updateForm.do":
+				System.out.println("4-1. 회원 정보 수정 폼으로 이동");
+				// 사용자가 -> 서버 : 글번호 데이터 수집
+				id = request.getParameter("id");
+				
+				// no에 맞는 데이터 가져오기 - DB - MemberViewSerivce
+				Execute.execute(Init.get("/member/view.do"), id);
 				
 				// 가져온 데이터를 JSP로 보내기 위해서 request에 담는다.
 				request.setAttribute("vo", result);
 				
 				// jsp 정보
-				jsp = "board/updateForm";
+				jsp = "member/updateForm";
 				break;
 				
 			case "/member/update.do":
-				System.out.println("4-2. 게시판 글수정 처리");
+				System.out.println("4-2. 회원 정보 수정 처리");
 				
 				// 수정할 글 번호를 받는다. - 데이터 수집
-				strNo = request.getParameter("no");
-				no = Long.parseLong(strNo);
+//				strNo = request.getParameter("no");
+//				no = Long.parseLong(strNo);
 				
 				id = (String) request.getParameter("title");
 				pw = (String) request.getParameter("pw");
@@ -282,8 +313,8 @@ public class MemberController {
 				
 				// 데이터 수집 - DB에서 실행에 필요한 데이터 - 글 번호, 비밀번호 - BoardVO
 				BoardVO deleteVO = new BoardVO();
-				strNo = request.getParameter("no");
-				no = Long.parseLong(strNo);
+//				strNo = request.getParameter("no");
+//				no = Long.parseLong(strNo);
 				deleteVO.setNo(no);
 				deleteVO.setPw(request.getParameter("pw"));
 				

@@ -46,15 +46,17 @@
 
 </head>
 <body>
+	<div class="jumbotron jumbotron-fluid">
+		<div class="container">
+			<h1>Board View</h1>
+			<p>Board List & Write Your Story</p>
+		</div>
+	</div>
 
 	<%-- 	글 번호 : ${param.no } 조회수 : ${param.inc } --%>
-	<div class="container p-3 my-3 bg-primary text-white"
+	<div class="container p-3 my-3 bg-dark text-white"
 		style="border-radius: 10px 10px 10px 10px; hieght: 200px;"
 	>
-		<h2>
-			<i class="material-icons">chrome_reader_mode</i> Board View
-		</h2>
-		<p>
 		<div class="float-right">
 			<a
 				href="/board/updateForm.do?no=${vo.no}&title=${vo.title}&content=${vo.content}&writer=${vo.writer}
@@ -76,20 +78,8 @@
 					<b>list</b>
 				</button>
 			</a>
-
-			<!-- 			<div id="deleteDiv"> -->
-			<!-- 				<form action="delete.jsp" method="post" id="deleteForm"> -->
-			<!-- 					<input type="hidden" name="no" value="10">  -->
-			<!-- 					<input name="pw" type="password" required maxlength="20" pattern="^.{3,20}$" id="pw" -->
-			<!-- 						title="3~20자 입력 가능" placeholder="본인 확인용 비밀번호" style="padding:5px; border-radius: 5px;"> -->
-			<!-- 					<button class="btn btn-danger"><b>삭제</b></button> -->
-			<!-- 					<button type="button" class="btn btn-secondary"	id="deleteCancelBtn"> -->
-			<!-- 						<b>취소</b> -->
-			<!-- 					</button> -->
-			<!-- 				</form> -->
-			<!-- 			</div> -->
 		</div>
-		<i class="fa fa-caret-right"></i> 일반 게시판 상세보기
+		<i class="fa fa-caret-right"></i> <b>${vo.no }.</b> ${vo.title }
 		<p>
 		<hr>
 		<table class="table"

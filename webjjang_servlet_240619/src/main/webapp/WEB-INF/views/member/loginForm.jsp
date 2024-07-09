@@ -8,10 +8,15 @@
 <title>interYard - 로그인</title>
 </head>
 <body>
+	<div class="jumbotron jumbotron-fluid">
+		<div class="container">
+			<h1>LOG-IN</h1>
+			<p>Access for interYard !</p>
+		</div>
+	</div>
 	<div class="container">
 		<div class="card bg-dark text-white">
 			<div class="card-header">
-				<h4>Log-In</h4>
 				<b>가입하신 정보로 로그인 해 주세요.</b>
 			</div>
 			<form action="login.do" method="post">

@@ -85,15 +85,16 @@
 </script>
 </head>
 <body>
+	<div class="jumbotron jumbotron-fluid">
+		<div class="container">
+			<h1>Board WriteForm</h1>
+			<p>Board List & Write Your Story</p>
+		</div>
+	</div>
 
-	<div class="container p-3 my-3 bg-primary text-white"
+	<div class="container p-3 my-3 bg-dark text-white"
 		style="border-radius: 10px 10px 10px 10px; hieght: 200px;">
-		<h2>
-			<i class="fa fa-pencil-square-o"></i> Board Write Form
-		</h2>
-		<p>
 			<i class="fa fa-caret-right"></i> 일반 게시판 글 등록
-		</p>
 		<hr>
 		<form action="write.do" method="post" id="writeForm">
 		<input name="perPageNum" value= "${param.perPageNum} " type="hidden">
