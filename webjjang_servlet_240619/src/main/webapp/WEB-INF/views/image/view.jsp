@@ -31,12 +31,6 @@
 
 </head>
 <body>
-	<div class="jumbotron jumbotron-fluid">
-		<div class="container">
-			<h1>Gallery View</h1>
-			<p>Show your Experience</p>
-		</div>
-	</div>
 	<%-- 	글 번호 : ${param.no } 조회수 : ${param.inc } --%>
 	<div class="container p-3 my-3 bg-dark text-white"
 		style="border-radius: 10px 10px 10px 10px; hieght: 200px;"

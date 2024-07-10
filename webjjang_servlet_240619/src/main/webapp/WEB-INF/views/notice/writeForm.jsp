@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -85,16 +86,15 @@
 </head>
 <body>
 
-	<div class="container p-3 my-3 bg-primary text-white"
+	<div class="container p-3 my-3 bg-dark text-white"
 		style="border-radius: 10px 10px 10px 10px; hieght: 200px;">
-		<h2>
-			<i class="fa fa-pencil-square-o"></i> Board Write Form
-		</h2>
-		<p>
 			<i class="fa fa-caret-right"></i> 일반 게시판 글 등록
-		</p>
 		<hr>
 		<form action="write.do" method="post" id="writeForm">
+		<input name="perPageNum" value= "${param.perPageNum} " type="hidden">
+		
+		<input type="hidden" name="perPageNum" value="${param.perPageNum }">
+
 			<div class="form-group">
 				<label for="title"><b>제목</b></label> <input type="text"
 					class="form-control" placeholder="제목 입력" id="title" name="title">
@@ -122,9 +122,10 @@
 				<button type="reset" class="btn btn-secondary">
 					<b>Reset</b>
 				</button>
-				<button type="button" class="btn btn-danger cancelBtn" onclick="history.back()">
+				<a href="list.do?page=${param.page}&perPageNum=${para.perPageNum}&key=${param.key}&word=${param.word}">
+				<button type="button" class="btn btn-danger cancelBtn">
 					<b>Cancel</b>
-				</button>
+				</button></a>
 			</div>
 		</form>
 	</div>

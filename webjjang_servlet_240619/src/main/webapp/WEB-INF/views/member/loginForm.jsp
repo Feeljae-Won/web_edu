@@ -8,12 +8,7 @@
 <title>interYard - 로그인</title>
 </head>
 <body>
-	<div class="jumbotron jumbotron-fluid">
-		<div class="container">
-			<h1>LOG-IN</h1>
-			<p>Access for interYard !</p>
-		</div>
-	</div>
+<p>
 	<div class="container">
 		<div class="card bg-dark text-white">
 			<div class="card-header">
@@ -33,8 +28,10 @@
 				</div>
 				<div class="card-footer">
 					<button class="btn btn-primary">Submit</button>
-					<button class="btn btn-info float-right" type="button">Sign Up</button>
-					<button class="btn btn-light float-right" type="button">Search ID &amp; PW</button>
+					<a class="btn btn-info float-right" 
+						href="/member/writeForm.do">Sign Up</a>
+					<button class="btn btn-light float-right" type="button" 
+						>Search ID &amp; PW</button>
 				</div>
 			</form>
 		</div>

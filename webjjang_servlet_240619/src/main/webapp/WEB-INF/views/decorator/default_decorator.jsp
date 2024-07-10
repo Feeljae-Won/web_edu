@@ -180,6 +180,27 @@ article {
 				</ul>
 			</div>
 		</nav>
+	<c:if test="${fn:contains(requestURI, '/board')}">
+	    <div class="jumbotron text-white" style="margin-bottom:0;
+	    	background-image: url('/upload/image/office.jpg'); background-size: cover; background-position: center;">
+	        <h1 style="text-shadow: 3px 3px 4px black; text-align:center;">Board</h1><p>
+	        <h6 style="text-shadow: 1px 1px 2px black; text-align:center;">Board List &amp; Write Your Story</h6>
+	    </div>
+	</c:if>
+	<c:if test="${fn:contains(requestURI, '/image')}">
+	    <div class="jumbotron text-white" style="margin-bottom:0;
+	    	background-image: url('/upload/image/gallery-bw.jpg'); background-size: cover; background-position: center;">
+	        <h1 style="text-shadow: 3px 3px 4px black; text-align:center;">Gallery</h1><p>
+	        <h6 style="text-shadow: 1px 1px 2px black; text-align:center;">Show your Experience</h6>
+	    </div>
+	</c:if>
+	<c:if test="${fn:contains(requestURI, '/member')}">
+	    <div class="jumbotron text-white" style="margin-bottom:0;
+	    	background-image: url('/upload/image/croud-bw.jpg'); background-size: cover; background-position: center;">
+	        <h1 style="text-shadow: 3px 3px 4px black; text-align:center;">Login &amp; Sign Up!</h1><p>
+	        <h6 style="text-shadow: 1px 1px 2px black; text-align:center;">Access for interYard !</h6>
+	    </div>
+	</c:if>
 	</header>
 	<article>
 		<!-- 여기에 게발자가 작성한 body 태그 안에 내용이 들어온다. -->

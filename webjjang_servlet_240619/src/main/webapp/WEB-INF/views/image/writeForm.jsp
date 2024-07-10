@@ -85,12 +85,6 @@
 </script>
 </head>
 <body>
-	<div class="jumbotron jumbotron-fluid">
-		<div class="container">
-			<h1>Gallery Upload</h1>
-			<p>Show your Experience</p>
-		</div>
-	</div>
 	<div class="container p-3 my-3 bg-dark text-white"
 		style="border-radius: 10px 10px 10px 10px; hieght: 200px;">
 			<i class="fa fa-caret-right"></i> 이미지 게시판 등록

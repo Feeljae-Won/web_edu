@@ -85,7 +85,7 @@ public class MemberController {
 				// 아니면 jsp로 forword를 시킨다.
 				// 원래는 main이나 진행하려는 uri로 이동
 				// 완성이 안되어 있어서 완성되어진 게시판 리스트로 보낸다.
-				jsp = "redirect:/board/list.do";
+				jsp = "redirect:/main/main.do";
 				
 				// 로그인 완료 메시지 처리
 				session.setAttribute("msg", "로그인이 정상 처리 되었습니다.");
@@ -99,7 +99,7 @@ public class MemberController {
 				
 				session.setAttribute("msg", "로그아웃이 정상 처리 되었습니다.");
 				
-				jsp = "redirect:/board/list.do";
+				jsp = "redirect:/main/main.do";
 				break;
 			
 			

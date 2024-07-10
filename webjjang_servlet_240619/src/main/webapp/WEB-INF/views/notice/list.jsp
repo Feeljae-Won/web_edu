@@ -1,26 +1,33 @@
-<%@page import="com.webjjang.board.service.BoardListService"%>
-<%@page import="com.webjjang.util.exe.Execute"%>
-<%@page import="com.webjjang.board.vo.BoardVO"%>
-<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="pageNav" tagdir="/WEB-INF/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>일반 게시판 리스트</title>
+<title>공지사항 리스트</title>
 <script type="text/javascript">
 	$(function() {
-		// 이벤트 ㅓ리
+		// 이벤트 처리
 		$(".dataRow").click(function() {
 // 			alert("click --------");
 			// 글 번호 수집
 			let no = $(this).find(".no").text();
 			console.log("no = " + no);
-			location="view.do?no=" + no + "&inc=1";
+			location="view.do?no=" + no + "&inc=1"
+					+"&${pageObject.pageQuery}";
+		})
+		// perPageNum 처리
+		$("#perPageNum").change(function() {
+// 			 alert("change perPageNum")
+			 // page는 1페이지 + 검색 데이터를 전부 보낸다.
+			 $("#searchForm").submit();
 		})
 		
+		// 검색 데이터 세팅
+		$("#key").val("${(empty pageObject.key)?'t':pageObject.key}");
+		$("#perPageNum").val("${(empty pageObject.perPageNum)?'10':pageObject.perPageNum}");
 	})
 </script>
 
@@ -60,22 +67,21 @@ button:hover {
 </script>
 </head>
 <body>
-
-	<div class="container p-3 my-3 bg-primary text-white"
+	<div class="jumbotron jumbotron-fluid">
+		<div class="container">
+			<h1>Board List</h1>
+			<p>Board List &amp; Write Your Story</p>
+		</div>
+	</div>
+	<div class="container p-3 my-3 bg-dark text-white"
 		style="border-radius: 10px 10px 10px 10px; hieght: 200px;">
-		<h2>
-			<i class="fa fa-caret-right"></i> Board List
-		</h2>
-		<p>
-			<i class="fa fa-caret-right"></i> 일반 게시판 리스트
-		</p>
 		<form action="list.do">
 			<div class="row">
 				<div class="col-sm-8">
 					<div class="input-group mb-8">
 						<div class="input-group-prepend">
 							<select name="key" id="key" class="form-control">
-								<option value="t">제목</option>
+								<option selected value="t">제목</option>
 								<option value="c">내용</option>
 								<option value="w">작성자</option>
 								<option value="tc">제목 + 내용</option>
@@ -85,7 +91,7 @@ button:hover {
 							</select>
 						</div>
 						<input type="text" class="form-control" placeholder="검색" id="word"
-							name="word">
+							name="word" value="${pageObject.word }">
 						<div class="input-group-append">
 							<button class="btn btn-dark">
 								<i class="fa fa-search"></i>
@@ -139,13 +145,18 @@ button:hover {
 			<tr>
 				<td colspan="5">
 					<div>
-						<a href="writeForm.do"><button class="btn btn-light">
+						<a href="writeForm.do?perPageNum=${pageObject.perPageNum }"><button class="btn btn-light">
 								<b>등록</b>
 							</button></a>
 					</div>
 				</td>
 			</tr>
 		</table>
+		<!-- 페이지 네이션 -->
+		<div>
+			<pageNav:pageNav listURI="list.do" pageObject="${pageObject }"></pageNav:pageNav>
+		</div>
+		
 	</div>
 </body>
 </html>
