@@ -180,8 +180,8 @@ button:hover {
 					</c:if>
 					<!-- 데이터 표시 시작 -->
 					<div class="col-md-4 dataRow">
-						<div class="card text-dark" style="width: 100%;">
-							<div class="imageDiv text-center align-content-center">
+						<div class="card text-dark" style="width: 100%; border-radius:10px;">
+							<div class="imageDiv text-center align-content-center" style="border-radius:10px;">
 								<img class="card-img-top" src="${vo.fileName }" alt="image"
 									style="width: 100%"
 								>

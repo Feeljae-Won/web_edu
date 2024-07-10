@@ -27,12 +27,14 @@ public class DispatcherServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	// Controller 생성
+	private MainController mainController= new MainController();
 	private BoardController boardController = new BoardController();
 	private NoticeController noticeController = new NoticeController();
 	private BoardReplyController boardReplyController = new BoardReplyController();
 	private MemberController memberController = new MemberController();
 	private ImageController imageController = new ImageController();
 	private AjaxController	ajaxController = new AjaxController();
+	
 	
 	/**
 	 * @see Servlet#init(ServletConfig)
@@ -63,6 +65,12 @@ public class DispatcherServlet extends HttpServlet {
 		// 모듈 - 일반게시판 - "/board" / 공지사항 - "/notice"
 		String uri = request.getRequestURI();
 		
+		// main 처리 - localhost -> localhost/main.do
+		if(uri.equals("/") || uri.equals("main.do")) {
+			response.sendRedirect("/main/main.do");
+			return;
+		}
+		
 		// 2번째 / 위치
 		int pos = uri.indexOf("/", 1);
 		
@@ -84,6 +92,10 @@ public class DispatcherServlet extends HttpServlet {
 		String jsp = null;
 		
 		switch (module) {
+		case "/main":
+			jsp = mainController.execute(request);
+			
+			break;
 		case "/board":
 			jsp = boardController.execute(request);
 			

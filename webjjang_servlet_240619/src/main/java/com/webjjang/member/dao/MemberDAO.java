@@ -32,9 +32,9 @@ public class MemberDAO extends DAO {
 			pstmt = con.prepareStatement(getListSQL(pageObject));
 			// 검색에 대한 데이터 세팅 - list() 만 사용
 			int idx = 0; // pstmt의 순서번호 사용. 먼저 1 증가하고 사용한다.
+			pstmt.setString(++idx, pageObject.getAccepter());
 			idx = setSearchData(pageObject, pstmt, idx);
 			
-			pstmt.setString(++idx, pageObject.getAccepter());
 			pstmt.setLong(++idx, pageObject.getStartRow());
 			pstmt.setLong(++idx, pageObject.getEndRow());
 			
@@ -513,7 +513,7 @@ public class MemberDAO extends DAO {
 			;
 	
 	// 검색이 있는 경우 TOTALROW + search
-		final String TOTALROW = "select count(*) from member where not id = 'admin' ";
+		final String TOTALROW = "select count(*) from member where (not id = 'admin') ";
 		
 		// LIST에 검색을 처리해서 만들어지는 sql문 작성 메서드
 		private String getListSQL(PageObject pageObject) {
@@ -536,10 +536,10 @@ public class MemberDAO extends DAO {
 			String word = pageObject.getWord();
 			// key 안에 t가 포함되어 있으면 title로 검생을 한다.
 			if(word != null && !word.equals("")) {
-				sql += " and ( 1=0 ) ";
-				if(key.indexOf("i") >= 0) sql += " or id like ? ";
-				if(key.indexOf("n") >= 0) sql += " or name like ? ";
-				if(key.indexOf("t") >= 0) sql += " or tel like ? ";
+//				sql += " and ( 1=0 ) ";
+				if(key.indexOf("i") >= 0) sql += " and id like ? ";
+				if(key.indexOf("n") >= 0) sql += " and name like ? ";
+				if(key.indexOf("t") >= 0) sql += " and tel like ? ";
 			}
 			return sql;
 		}

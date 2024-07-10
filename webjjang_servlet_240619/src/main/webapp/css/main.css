@@ -1,0 +1,24 @@
+@charset "EUC-KR";
+
+/* 이미지 게시판 제목을 2줄만 표시하고 말줄임표로 사용 */
+/* .title{ */
+/* 	text-overflow: ellipsis; */
+/* 	overflow: hidden; */
+/* 	display: -webkit-box; */
+/* 	-webkit-bot-orient: vertical; */
+/* 	-webkit-line-clamp: 2; */
+/* } */
+
+.imageLink:hover {
+	opacity: 70%; /* 투명도 */
+	cursor: pointer;
+}
+
+.boardLink:hover {
+	background: #e0e0e0;
+	cursor: pointer;
+}
+
+.module {
+	padding:15px 5px;
+}

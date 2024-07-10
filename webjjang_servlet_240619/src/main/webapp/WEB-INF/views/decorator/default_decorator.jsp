@@ -7,6 +7,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="decorator"
 	uri="http://www.opensymphony.com/sitemesh/decorator"%>
 <!DOCTYPE html>
@@ -76,8 +77,19 @@ article {
 </head>
 <body>
 	<header>
+	<%-- 현재 요청 URI 가져오기 --%>
+	<c:set var="requestURI" value="${pageContext.request.requestURI}" />
+	
+	<%-- 특정 URI 패턴에 따라 Jumbotron 적용 --%>
+	<c:if test="${fn:contains(requestURI, '/main.do')}">
+	    <div class="jumbotron text-white" style="margin-bottom:0;
+	    	background-image: url('/upload/image/DSCF9544.JPG'); background-size: cover; background-position: center;">
+	        <h1 style="text-shadow: 3px 3px 4px black; text-align:center;">Welcome to our site!</h1><p>
+	        <h6 style="text-shadow: 1px 1px 2px black; text-align:center;">This is the home page.</h6>
+	    </div>
+	</c:if>
 		<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-			<a class="navbar-brand active" href="main.do">
+			<a class="navbar-brand active" href="/main/main.do">
 				<i><b>i</b>nter<b>Yard</b></i>
 			</a>
 

@@ -1,9 +1,6 @@
 package com.webjjang.main.controller;
 
-import com.webjjang.board.controller.BoardController;
-import com.webjjang.member.controller.MemberController;
 import com.webjjang.member.vo.LoginVO;
-import com.webjjang.notice.controller.NoticeController;
 import com.webjjang.util.io.In;
 
 public class Main {

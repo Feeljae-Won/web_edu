@@ -159,8 +159,27 @@ button:hover {
 					<th >생년월일</th>
 					<th >성별</th>
 					<th >연락처</th>
-					<th >회원등급</th>
-					<th >상태</th>
+					<th class="dropdown">
+						<div class="dropdown-toggle" data-toggle="dropdown">
+							회원등급
+						</div>
+						<div class="dropdown-menu">
+					      <a class="dropdown-item" href="#" >일반회원</a>
+					      <a class="dropdown-item" href="#" >쇼핑몰관리자</a>
+					      <a class="dropdown-item" href="#" >최종관리자</a>
+					    </div>
+					</th>
+					<th class="dropdown">
+						<div class="dropdown-toggle" data-toggle="dropdown">
+							상태
+						</div>
+						<div class="dropdown-menu">
+					      <a class="dropdown-item" href="#">정상</a>
+					      <a class="dropdown-item" href="#">휴면</a>
+					      <a class="dropdown-item" href="#">탈퇴</a>
+					      <a class="dropdown-item" href="#">강퇴</a>
+					    </div>
+					</th>
 					<th style="border-radius: 0px 10px 0px 0px;">사진</th>
 				</tr>
 			</thead>
