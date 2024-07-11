@@ -198,7 +198,7 @@ public class BoardController {
 			} // end of switch
 		} catch (Exception e) {
 			// TODO: handle exception
-			// e.printStackTrace();
+			 e.printStackTrace();
 			
 			// 예외 객체 jsp에서 사용하기 위해 request에 담는다.
 			request.setAttribute("e", e);

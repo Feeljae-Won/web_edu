@@ -2,7 +2,6 @@ package com.webjjang.main.controller;
 
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import com.webjjang.util.exe.Execute;
 import com.webjjang.util.page.PageObject;
@@ -13,7 +12,6 @@ public class MainController {
 	public String execute(HttpServletRequest request) {
 
 		// session을 request에서 부터 꺼낸다.
-		HttpSession session = request.getSession();
 		
 		// return jsp 정보 저장 변수
 		String jsp = null;
@@ -41,6 +39,13 @@ public class MainController {
 				result = Execute.execute(Init.get("/board/list.do"), pageObject);
 				// 가져온 데이터를 request에 저장 -> jsp 까지 전달 된다.
 				request.setAttribute("boardList", result);
+				
+				// 공지사항 게시판의 데이터 가져오기
+				pageObject.setPerPageNum(5);
+				// [MainController] - (Execute) - BoardListService - BoardDAO.list()
+				result = Execute.execute(Init.get("/notice/list.do"), pageObject);
+				// 가져온 데이터를 request에 저장 -> jsp 까지 전달 된다.
+				request.setAttribute("noticeList", result);
 				
 				// 이미지 게시판의 데이터 가져오기
 				pageObject.setPerPageNum(6);

@@ -6,20 +6,18 @@
 			style="text-align: center; border-radius: 10px; border-style: hidden;">
 			<thead class="thead-dark">
 				<tr>
-					<th colspan="5" style="border-radius: 10px 10px 0px 0px; text-align:left;">
-					<span class="float-right list"><a href="/board/list.do"><b>+</b></a>
+					<th colspan="3" style="border-radius: 10px 10px 0px 0px; text-align:left;">
+					<span class="float-right list"><a href="/notice/list.do"><b>+</b></a>
 					</span>
-					Board List</th>
+					Notice List</th>
 				</tr>
 			</thead>
-			<c:forEach items="${boardList }" var="vo">
-				<tr class="dataRow table-light board boardLink">
+			<c:forEach items="${noticeList }" var="vo">
+				<tr class="dataRow table-light notice noticeLink">
 					<!-- td : table data - 테이블 데이터 텍스트 -->
 					<td class="no">${vo.no}</td>
 					<td style="text-align:left;">${vo.title}</td>
-					<td>${vo.writer}</td>
-					<td>${vo.writeDate}</td>
-					<td>${vo.hit}</td>
+					<td>~ ${vo.endDate}</td>
 				</tr>
 			</c:forEach>
 		</table>

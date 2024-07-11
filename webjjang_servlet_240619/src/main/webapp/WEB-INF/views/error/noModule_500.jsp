@@ -60,7 +60,7 @@
 				</div>
 			</div>
 			<div class="card-footer">
-				<a href="/board/list.do" class="btn btn-primary">일반 게시판으로 가기</a>
+				<a href="/main/main.do" class="btn btn-primary">메인 페이지로 가기</a>
 			</div>
 		</div>
 

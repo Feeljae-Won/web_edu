@@ -1,17 +1,59 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"
+%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>일반 게시판 글수정</title>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<title>공지사항 글 수정</title>
 <link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css"
+>
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
 
 <script type="text/javascript">
 	$(function() {
+
+		// datepicker 설정
+		$(".datepicker")
+				.datepicker(
+						{
+							// 입력란의 데이터 포맷
+							dateFormat : "yy-mm-dd",
+							// 연 선택 입력 추가
+							changeYear : true,
+							// 월 선택 입력 추가
+							changeMonth : true,
+							// 요일 선택할 때 이름 (기본은 영어)
+							dayNamesMin : [ "일", "월", "화", "수", "목",
+									"금", "토" ],
+							// 월 선택할 때 이름 (기본은 영어)
+							monthNamesShort : [ "1월", "2월", "3월", "4월",
+									"5월", "6월", "7월", "8월", "9월",
+									"10월", "11월", "12월" ],
+						});
+		$("#startDate").datepicker(
+				"option",
+				{
+					// 			"minDate" : new Date(),
+					onClose : function(selectedDate) {
+						if ($(this).val() != "")
+							$("#endDate").datepicker("option",
+									"minDate", selectedDate);
+					}
+				});
+
+		$("#endDate").datepicker(
+				"option",
+				{
+					"minDate" : new Date(),
+					onClose : function(selectedDate) {
+						if ($(this).val() != "")
+							$("#startDate").datepicker("option",
+									"maxDate", selectedDate);
+					}
+				});
 
 		// 2. jquery 확인
 		console.log("jquery check ---------------------");
@@ -26,19 +68,11 @@
 				return false;
 			if (isEmpty("#content", "내용", 1))
 				return false;
-			if (isEmpty("#writer", "작성자", 1))
-				return false;
-			if (isEmpty("#pw", "비밀번호", 0))
-				return false;
 
 			// 글자 길이 체크
 			if (lengthCheck("#title", "제목", 3, 100, 1))
 				return false;
 			if (lengthCheck("#content", "내용", 3, 500, 1))
-				return false;
-			if (lengthCheck("#writer", "작성자", 2, 20, 1))
-				return false;
-			if (lengthCheck("#pw", "비밀번호", 4, 20, 0))
 				return false;
 
 			return false;
@@ -49,45 +83,48 @@
 </script>
 </head>
 <body>
-	<div class="jumbotron jumbotron-fluid">
-		<div class="container">
-			<h1>Board UpdateForm</h1>
-			<p>Board List & Write Your Story</p>
-		</div>
-	</div>
 	<br>
 	<div class="container p-3 my-3 bg-dark text-white"
-		style="border-radius: 10px 10px 10px 10px; hieght: 200px;">
-		<p><i class="fa fa-caret-right"></i> <b>${vo.no }. </b> ${vo.title }</p>
+		style="border-radius: 10px 10px 10px 10px; hieght: 200px;"
+	>
+		<p>
+			<i class="fa fa-caret-right"></i> <b>${vo.no }. </b> ${vo.title }
+		</p>
 		<hr>
 		<form action="update.do" method="post" id="updateForm">
-		<input type="hidden" name="page" value="${param.page }">
-		<input type="hidden" name="perPageNum" value="${param.perPageNum }">
-		<input type="hidden" name="key" value="${param.key }">
-		<input type="hidden" name="word" value="${param.word }">
+			<input type="hidden" name="page" value="${param.page }">
+			<input type="hidden" name="perPageNum" value="${param.perPageNum }">
+			<input type="hidden" name="key" value="${param.key }">
+			<input type="hidden" name="word" value="${param.word }">
 			<div class="form-group">
-				<label for="no"><b>번호</b></label> <input type="text" maxlength="100"
-					class="form-control" placeholder="제목 입력" id="no" name="no"
-					value=${vo.no } readonly>
+				<label for="no"><b>번호</b></label>
+				<input type="text" maxlength="100" class="form-control"
+					placeholder="제목 입력" id="no" name="no" value=${vo.no } readonly
+				>
 			</div>
 			<div class="form-group">
-				<label for="title"><b>제목</b></label> <input type="text"
-					maxlength="20" class="form-control" placeholder="제목 입력" id="title"
-					name="title" value=${vo.title }>
+				<label for="title"><b>제목</b></label>
+				<input type="text" maxlength="20" class="form-control"
+					placeholder="제목 입력" id="title" name="title" value=${vo.title }
+				>
 			</div>
 			<div class="form-group">
 				<label for="content"><b>내용</b></label>
 				<textarea class="form-control" rows="7" id="content" name="content"
-					rows="7" maxlength="500" placeholder="내용 입력">${vo.content }</textarea>
+					rows="7" maxlength="500" placeholder="내용 입력"
+				>${vo.content }</textarea>
 			</div>
-			<div class="form-inline">
-				<label for="writer"><b>작성자</b></label> <input type="text"
-					class="form-control" placeholder="작성자 입력" id="writer" name="writer"
-					style="margin: 0px 0px 0px 10px;" value=${vo.writer }> <label
-					for="pw" style="margin: 0px 0px 0px 10px;"><b>Password:</b></label>
-				<input type="password" class="form-control"
-					placeholder="비밀번호 입력 (본인확인)" id="pw" name="pw"
-					style="margin: 0px 0px 0px 10px;">
+			<div class="form-group">
+				<label for="startDate"><b>공지 시작일</b></label>
+				<input type="text" id="startDate" name="startDate"
+					value="${vo.startDate }" class="datepicker" required
+					autocomplete="off"
+				>
+				<br> <label for="endDate"><b>공지 종료일</b></label>
+				<input type="text" id="endDate" name="endDate"
+					value="${vo.endDate }" class="datepicker" required
+					autocomplete="off"
+				>
 			</div>
 			<hr>
 			<div>
@@ -97,7 +134,9 @@
 				<button type="reset" class="btn btn-secondary">
 					<b>Reset</b>
 				</button>
-				<button type="button" class="btn btn-danger cancelBtn" onclick="history.back()">
+				<button type="button" class="btn btn-danger cancelBtn"
+					onclick="history.back()"
+				>
 					<b>Cancel</b>
 				</button>
 			</div>

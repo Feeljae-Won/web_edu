@@ -5,11 +5,9 @@ import java.util.List;
 
 import javax.el.ELException;
 
-import com.webjjang.board.vo.BoardVO;
 import com.webjjang.boardreply.vo.BoardReplyVO;
 import com.webjjang.main.dao.DAO;
 import com.webjjang.util.db.DB;
-import com.webjjang.util.page.PageObject;
 import com.webjjang.util.page.ReplyPageObject;
 
 public class BoardReplyDAO extends DAO {

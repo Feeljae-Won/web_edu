@@ -2,13 +2,10 @@ package com.webjjang.boardreply.service;
 
 import java.util.List;
 
-import com.webjjang.board.dao.BoardDAO;
-import com.webjjang.board.vo.BoardVO;
 import com.webjjang.boardreply.dao.BoardReplyDAO;
 import com.webjjang.boardreply.vo.BoardReplyVO;
 import com.webjjang.main.dao.DAO;
 import com.webjjang.main.service.Service;
-import com.webjjang.util.page.PageObject;
 import com.webjjang.util.page.ReplyPageObject;
 
 public class BoardReplyListService implements Service {

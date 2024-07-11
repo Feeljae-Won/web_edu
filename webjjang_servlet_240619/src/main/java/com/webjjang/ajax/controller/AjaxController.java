@@ -48,7 +48,6 @@ public class AjaxController {
 				break;
 			} // end of switch
 		} catch (Exception e) {
-			// TODO: handle exception
 				e.printStackTrace();
 				request.setAttribute("e", e);
 				jsp = "error/noModule_500";

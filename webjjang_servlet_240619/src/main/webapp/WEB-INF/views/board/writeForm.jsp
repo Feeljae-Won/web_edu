@@ -91,8 +91,6 @@
 		<hr>
 		<form action="write.do" method="post" id="writeForm">
 		<input name="perPageNum" value= "${param.perPageNum} " type="hidden">
-		
-		<input type="hidden" name="perPageNum" value="${param.perPageNum }">
 
 			<div class="form-group">
 				<label for="title"><b>제목</b></label> <input type="text"

@@ -15,8 +15,7 @@
 			// 글 번호 수집
 			let no = $(this).find(".no").text();
 			console.log("no = " + no);
-			location="view.do?no=" + no + "&inc=1"
-					+"&${pageObject.pageQuery}";
+			location="view.do?no=" + no	+"&${pageObject.pageQuery}";
 		})
 		// perPageNum 처리
 		$("#perPageNum").change(function() {
@@ -67,12 +66,6 @@ button:hover {
 </script>
 </head>
 <body>
-	<div class="jumbotron jumbotron-fluid">
-		<div class="container">
-			<h1>Board List</h1>
-			<p>Board List &amp; Write Your Story</p>
-		</div>
-	</div>
 	<div class="container p-3 my-3 bg-dark text-white"
 		style="border-radius: 10px 10px 10px 10px; hieght: 200px;">
 		<form action="list.do">
@@ -83,10 +76,7 @@ button:hover {
 							<select name="key" id="key" class="form-control">
 								<option selected value="t">제목</option>
 								<option value="c">내용</option>
-								<option value="w">작성자</option>
 								<option value="tc">제목 + 내용</option>
-								<option value="tw">제목 + 작성자</option>
-								<option value="cw">내용 + 작성자</option>
 								<option value="tcw">모두</option>
 							</select>
 						</div>
@@ -125,32 +115,33 @@ button:hover {
 			style="text-align: center; border-radius: 10px; border-style: hidden;">
 			<thead class="thead-dark">
 				<tr>
-					<th style="border-radius: 10px 0px 0px 0px; width:10%; font-size:13px;">번호</th>
-					<th style="width:60%; text-align:left;">제목</th>
-					<th style="width:15%">작성자</th>
-					<th style="width:10%">작성일</th>
-					<th style="border-radius: 0px 10px 0px 0px; width:5%; font-size:10px;">조회수</th>
+					<th style="border-radius: 10px 0px 0px 0px; width:5%;">No</th>
+					<th >공지 기간</th>
+					<th style="text-align:left; width:60%;">제목</th>
+					<th style="border-radius: 0px 10px 0px 0px;">최종 등록일</th>
 				</tr>
 			</thead>
 			<c:forEach items="${list }" var="vo">
 				<tr class="dataRow table-light">
 					<!-- td : table data - 테이블 데이터 텍스트 -->
 					<td class="no">${vo.no}</td>
-					<td style="text-align:left;">${vo.title}</td>
-					<td>${vo.writer}</td>
-					<td>${vo.writeDate}</td>
-					<td>${vo.hit}</td>
+					<td>${vo.startDate} ~ ${vo.endDate}</td>
+					<td style="text-align:left;"><b>${vo.title}</b></td>
+					<td>${vo.updateDate}</td>
 				</tr>
 			</c:forEach>
-			<tr>
-				<td colspan="5">
-					<div>
-						<a href="writeForm.do?perPageNum=${pageObject.perPageNum }"><button class="btn btn-light">
-								<b>등록</b>
-							</button></a>
-					</div>
-				</td>
-			</tr>
+			<!-- 공지사항 등록은 최종 관리자만 가능 -->
+			<c:if test="${!empty login && login.gradeNo == 9 }">
+				<tr>
+					<td colspan="5">
+						<div>
+							<a href="writeForm.do?perPageNum=${pageObject.perPageNum }"><button class="btn btn-light">
+									<b>등록</b>
+								</button></a>
+						</div>
+					</td>
+				</tr>
+			</c:if>
 		</table>
 		<!-- 페이지 네이션 -->
 		<div>

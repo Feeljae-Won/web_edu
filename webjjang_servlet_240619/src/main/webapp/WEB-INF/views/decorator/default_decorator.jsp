@@ -201,6 +201,13 @@ article {
 	        <h6 style="text-shadow: 1px 1px 2px black; text-align:center;">Access for interYard !</h6>
 	    </div>
 	</c:if>
+	<c:if test="${fn:contains(requestURI, '/notice')}">
+	    <div class="jumbotron text-white" style="margin-bottom:0;
+	    	background-image: url('/upload/image/notice-bw.jpg'); background-size: cover; background-position: center;">
+	        <h1 style="text-shadow: 3px 3px 4px black; text-align:center;">Notice</h1><p>
+	        <h6 style="text-shadow: 1px 1px 2px black; text-align:center;">Click to Notice!</h6>
+	    </div>
+	</c:if>
 	</header>
 	<article>
 		<!-- 여기에 게발자가 작성한 body 태그 안에 내용이 들어온다. -->

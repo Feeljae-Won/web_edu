@@ -13,7 +13,7 @@
 <div class="container bg-light">
 	<div class="row">
 		<div class="col-md-6 module">
-			<jsp:include page="boardList.jsp"/>
+			<jsp:include page="noticeList.jsp"/>
 		</div>
 		<div class="col-md-6 module">
 			<jsp:include page="boardList.jsp"/>
