@@ -16,7 +16,7 @@
 				<tr class="dataRow table-light notice noticeLink">
 					<!-- td : table data - 테이블 데이터 텍스트 -->
 					<td class="no">${vo.no}</td>
-					<td style="text-align:left;">${vo.title}</td>
+					<td class="text-truncate" style="text-align:left;">${vo.title}</td>
 					<td>~ ${vo.endDate}</td>
 				</tr>
 			</c:forEach>

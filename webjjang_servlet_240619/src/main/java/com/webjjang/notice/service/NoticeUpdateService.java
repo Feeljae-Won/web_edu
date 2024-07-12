@@ -2,7 +2,6 @@ package com.webjjang.notice.service;
 
 import com.webjjang.notice.dao.NoticeDAO;
 import com.webjjang.notice.vo.NoticeVO;
-import com.webjjang.board.dao.BoardDAO;
 import com.webjjang.main.dao.DAO;
 import com.webjjang.main.service.Service;
 

@@ -1,7 +1,6 @@
 package com.webjjang.member.controller;
 
 import java.io.File;
-import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -85,7 +84,7 @@ public class MemberController {
 				// 아니면 jsp로 forword를 시킨다.
 				// 원래는 main이나 진행하려는 uri로 이동
 				// 완성이 안되어 있어서 완성되어진 게시판 리스트로 보낸다.
-				jsp = "redirect:/main/main.do";
+				jsp = "redirect:/";
 				
 				// 로그인 완료 메시지 처리
 				session.setAttribute("msg", "로그인이 정상 처리 되었습니다.");
@@ -99,7 +98,7 @@ public class MemberController {
 				
 				session.setAttribute("msg", "로그아웃이 정상 처리 되었습니다.");
 				
-				jsp = "redirect:/main/main.do";
+				jsp = "redirect:/";
 				break;
 			
 			
@@ -160,7 +159,7 @@ public class MemberController {
 				
 				// jsp 정보 앞에 "redirect:"가 붙어 있으면 redirect를 
 				// 아니면 jsp로 forword를 시킨다.
-				jsp = "redirect:/board/list.do";
+				jsp = "redirect:/";
 				
 				// 처리 메시지
 				session.setAttribute("msg", "회원 가입이 정상 처리 되었습니다.");
@@ -300,8 +299,7 @@ public class MemberController {
 				pageObject = PageObject.getInstance(request);
 				System.out.println(pageObject);
 				// 글보기로 자동 이동하기
-				jsp = "redirect:view.do?no=" + no + "&inc=0"
-						+ "&" + pageObject.getPageQuery(); 
+				jsp = "redirect:view.do?no=" + no + pageObject.getPageQuery(); 
 				
 				session.setAttribute("msg", "글 수정이 성공적으로 처리 되었습니다.");
 				
@@ -335,24 +333,14 @@ public class MemberController {
 				break;
 				
 			default:
-				System.out.println("####################################");;
-				System.out.println("## 잘못된 메뉴를 선택하셨습니다.          ##");;
-				System.out.println("## [0~5, 0] 중에서 입력하셔야 합니다.    ##");;
-				System.out.println("####################################");;
+				jsp = "error/404";
 				break;
 			} // end of switch
 		} catch (Exception e) {
-			// TODO: handle exception
 				e.printStackTrace();
-			System.out.println();
-			System.out.println("$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@");
-			System.out.println("$%@ << 오류 출력 >>                         $%@");
-			System.out.println("$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@");
-			System.out.println("$%@ 타입 : " + e.getClass().getSimpleName());
-			System.out.println("$%@ 내용 : " + e.getMessage());
-			System.out.println("$%@ 조치 : 데이터를 확인 후 다시 실행해 보세요.");
-			System.out.println("$%@     : 계속 오류가 나면 전산담당자에게 연락하세요.");
-			System.out.println("$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@$%@");
+				request.setAttribute("e", e);
+				
+				jsp = "error/500";
 		} // end of try~catch
 		return jsp;
 	} // end of execute()

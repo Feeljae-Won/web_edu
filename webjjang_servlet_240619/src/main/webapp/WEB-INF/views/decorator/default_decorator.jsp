@@ -5,31 +5,48 @@
 
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+	pageEncoding="UTF-8"
+%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib prefix="decorator"
-	uri="http://www.opensymphony.com/sitemesh/decorator"%>
+	uri="http://www.opensymphony.com/sitemesh/decorator"
+%>
 <!DOCTYPE html>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<!-- 개발자 작성한 title을 가져 다 사용 -->
-	<title>
-		interYard:<decorator:title />
-	</title>
-  <!-- Bootstrap 4 + jquery 라이브러리 등록 - CDN 방식 -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- 개발자 작성한 title을 가져 다 사용 -->
+<title>interYard:<decorator:title />
+</title>
+<!-- Bootstrap 4 + jquery 라이브러리 등록 - CDN 방식 -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+>
+<script
+	src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"
+></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+></script>
 
 <!-- icon 라이브러리 등록 - Font Awesome 4 / google -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+	rel="stylesheet"
+>
 
 <style type="text/css">
+.container {
+	padding: 25px 5px;
+}
+
 pre {
 	background: white;
 	border: 0px;
@@ -77,18 +94,22 @@ article {
 </head>
 <body>
 	<header>
-	<%-- 현재 요청 URI 가져오기 --%>
-	<c:set var="requestURI" value="${pageContext.request.requestURI}" />
-	
-	<%-- 특정 URI 패턴에 따라 Jumbotron 적용 --%>
-	<c:if test="${fn:contains(requestURI, '/main.do')}">
-	    <div class="jumbotron text-white" style="margin-bottom:0;
-	    	background-image: url('/upload/image/DSCF9544.JPG'); background-size: cover; background-position: center;">
-	        <h1 style="text-shadow: 3px 3px 4px black; text-align:center;">Welcome to our site!</h1><p>
-	        <h6 style="text-shadow: 1px 1px 2px black; text-align:center;">This is the home page.</h6>
-	    </div>
-	</c:if>
-		<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+		<%-- 현재 요청 URI 가져오기 --%>
+		<c:set var="requestURI" value="${pageContext.request.requestURI}" />
+
+		<%-- 특정 URI 패턴에 따라 Jumbotron 적용 --%>
+		<c:if test="${fn:contains(requestURI, '/main.do')}">
+			<div class="jumbotron text-white" 
+				style="margin-bottom: 0; background-image: url('/upload/image/DSCF9544.JPG'); 
+					background-size: cover; background-position: center;">
+				<h1 style="text-shadow: 3px 3px 4px black; text-align: center;">Welcome
+					to our site!</h1>
+				<p>
+				<h6 style="text-shadow: 1px 1px 2px black; text-align: center;">This
+					is the home page.</h6>
+			</div>
+		</c:if>
+		<nav class="navbar navbar-expand-lg bg-dark navbar-dark">
 			<a class="navbar-brand active" href="/main/main.do">
 				<i><b>i</b>nter<b>Yard</b></i>
 			</a>
@@ -99,7 +120,7 @@ article {
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="collapse navbar-collapse" id="collapsibleNavbar">
-				<ul class="navbar-nav">
+				<ul class="navbar-nav mr-auto">
 					<li class="nav-item ${( module == '/notice')?'active' : ''}">
 						<a class="nav-link" href="/notice/list.do">Notice</a>
 					</li>
@@ -121,12 +142,11 @@ article {
 						</li>
 					</c:if>
 				</ul>
-			</div>
-			<div class="float-right">
-				<ul class="navbar-nav">
+				<!-- 이곳에서 부터 오른쪽 정렬하고 싶어 -->
+				<ul class="navbar-nav ml-auto d-flex">
 					<c:if test="${ empty login }">
 						<!-- 로그인 안했을 때 -->
-						<li class="nav-item">
+						<li class="nav-item ">
 							<a class="nav-link" href="/member/loginForm.do">
 								<i class="fa fa-user"></i> LOGIN
 							</a>
@@ -145,7 +165,8 @@ article {
 							</c:if>
 							<c:if test="${!empty login.photo }">
 								<img src="${login.photo }" class="rounded-circle"
-									style="height:25px;">
+									style="height: 25px;"
+								>
 							</c:if>
 							<i class="material-icons"></i> <b> ${login.name }(${login.gradeName })</b>님
 							안녕하세요.
@@ -180,34 +201,47 @@ article {
 				</ul>
 			</div>
 		</nav>
-	<c:if test="${fn:contains(requestURI, '/board')}">
-	    <div class="jumbotron text-white" style="margin-bottom:0;
-	    	background-image: url('/upload/image/office.jpg'); background-size: cover; background-position: center;">
-	        <h1 style="text-shadow: 3px 3px 4px black; text-align:center;">Board</h1><p>
-	        <h6 style="text-shadow: 1px 1px 2px black; text-align:center;">Board List &amp; Write Your Story</h6>
-	    </div>
-	</c:if>
-	<c:if test="${fn:contains(requestURI, '/image')}">
-	    <div class="jumbotron text-white" style="margin-bottom:0;
-	    	background-image: url('/upload/image/gallery-bw.jpg'); background-size: cover; background-position: center;">
-	        <h1 style="text-shadow: 3px 3px 4px black; text-align:center;">Gallery</h1><p>
-	        <h6 style="text-shadow: 1px 1px 2px black; text-align:center;">Show your Experience</h6>
-	    </div>
-	</c:if>
-	<c:if test="${fn:contains(requestURI, '/member')}">
-	    <div class="jumbotron text-white" style="margin-bottom:0;
-	    	background-image: url('/upload/image/croud-bw.jpg'); background-size: cover; background-position: center;">
-	        <h1 style="text-shadow: 3px 3px 4px black; text-align:center;">Login &amp; Sign Up!</h1><p>
-	        <h6 style="text-shadow: 1px 1px 2px black; text-align:center;">Access for interYard !</h6>
-	    </div>
-	</c:if>
-	<c:if test="${fn:contains(requestURI, '/notice')}">
-	    <div class="jumbotron text-white" style="margin-bottom:0;
-	    	background-image: url('/upload/image/notice-bw.jpg'); background-size: cover; background-position: center;">
-	        <h1 style="text-shadow: 3px 3px 4px black; text-align:center;">Notice</h1><p>
-	        <h6 style="text-shadow: 1px 1px 2px black; text-align:center;">Click to Notice!</h6>
-	    </div>
-	</c:if>
+		<c:if test="${fn:contains(requestURI, '/board')}">
+			<div class="jumbotron text-white"
+				style="margin-bottom: 0; background-image: url('/upload/image/office.jpg'); background-size: cover; background-position: center;"
+			>
+				<h1 style="text-shadow: 3px 3px 4px black; text-align: center;">Board</h1>
+				<p>
+				<h6 style="text-shadow: 1px 1px 2px black; text-align: center;">Board
+					List &amp; Write Your Story</h6>
+			</div>
+		</c:if>
+		<c:if test="${fn:contains(requestURI, '/image')}">
+			<div class="jumbotron text-white"
+				style="margin-bottom: 0; background-image: url('/upload/image/gallery-bw.jpg'); background-size: cover; background-position: center;"
+			>
+				<h1 style="text-shadow: 3px 3px 4px black; text-align: center;">Gallery</h1>
+				<p>
+				<h6 style="text-shadow: 1px 1px 2px black; text-align: center;">Show
+					your Experience</h6>
+			</div>
+		</c:if>
+		<c:if test="${fn:contains(requestURI, '/member')}">
+			<div class="jumbotron text-white"
+				style="margin-bottom: 0; background-image: url('/upload/image/croud-bw.jpg'); background-size: cover; background-position: center;"
+			>
+				<h1 style="text-shadow: 3px 3px 4px black; text-align: center;">Login
+					&amp; Sign Up!</h1>
+				<p>
+				<h6 style="text-shadow: 1px 1px 2px black; text-align: center;">Access
+					for interYard !</h6>
+			</div>
+		</c:if>
+		<c:if test="${fn:contains(requestURI, '/notice')}">
+			<div class="jumbotron text-white"
+				style="margin-bottom: 0; background-image: url('/upload/image/notice-bw.jpg'); background-size: cover; background-position: center;"
+			>
+				<h1 style="text-shadow: 3px 3px 4px black; text-align: center;">Notice</h1>
+				<p>
+				<h6 style="text-shadow: 1px 1px 2px black; text-align: center;">Click
+					to Notice!</h6>
+			</div>
+		</c:if>
 	</header>
 	<article>
 		<!-- 여기에 게발자가 작성한 body 태그 안에 내용이 들어온다. -->
@@ -218,39 +252,41 @@ article {
 	</footer>
 
 	<c:if test="${ !empty msg }">
-      <!-- msg를 표시할 모달 창 -->
-      <!-- The Modal -->
-        <div class="modal fade" id="msgModal">
-          <div class="modal-dialog">
-               <div class="modal-content">
-         
-                 <!-- Modal Header -->
-                 <div class="modal-header">
-                      <h4 class="modal-title">처리 결과</h4>
-                      <button type="button" class="close" data-dismiss="modal">&times;</button>
-                 </div>
-           
-                 <!-- Modal body -->
-                 <div class="modal-body">
-                      ${msg }
-                 </div>
-           
-                 <!-- Modal footer -->
-                 <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                 </div>
-           
-               </div>
-          </div>
-        </div>
-      <!-- 모달을 보이게 하는 스크립트 -->
-      <script type="text/javascript">
-         $(function() {
-            $("#msgModal").modal("show");
-         });
-      </script>
-   </c:if>
+		<!-- msg를 표시할 모달 창 -->
+		<!-- The Modal -->
+		<div class="modal fade" id="msgModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+
+					<!-- Modal Header -->
+					<div class="modal-header">
+						<h4 class="modal-title">처리 결과</h4>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+
+					<!-- Modal body -->
+					<div class="modal-body">${msg }</div>
+
+					<!-- Modal footer -->
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal"
+						>닫기</button>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<!-- 모달을 보이게 하는 스크립트 -->
+		<script type="text/javascript">
+			$(function() {
+				$("#msgModal").modal("show");
+			});
+		</script>
+	</c:if>
 </body>
 </html>
 
-<% session.removeAttribute("msg"); %>
+<%
+session.removeAttribute("msg");
+%>

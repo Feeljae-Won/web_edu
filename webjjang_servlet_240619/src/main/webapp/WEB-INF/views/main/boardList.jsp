@@ -16,7 +16,7 @@
 				<tr class="dataRow table-light board boardLink">
 					<!-- td : table data - 테이블 데이터 텍스트 -->
 					<td class="no">${vo.no}</td>
-					<td style="text-align:left;">${vo.title}</td>
+					<td class="text-truncate" style="text-align:left;">${vo.title}</td>
 					<td>${vo.writer}</td>
 					<td>${vo.writeDate}</td>
 					<td>${vo.hit}</td>

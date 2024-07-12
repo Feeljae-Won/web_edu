@@ -12,10 +12,11 @@
 <body>
 <div class="container bg-light">
 	<div class="row">
-		<div class="col-md-6 module">
+		<!-- 반응형 웹 : 한줄을 유지 되는 것 정의 : col-해상도-6 / 해상도 : md-중간,  lg-큰, xl-제일 큰  -->
+		<div class="col-lg-6 module">
 			<jsp:include page="noticeList.jsp"/>
 		</div>
-		<div class="col-md-6 module">
+		<div class="col-lg-6 module">
 			<jsp:include page="boardList.jsp"/>
 		</div>
 	</div>
