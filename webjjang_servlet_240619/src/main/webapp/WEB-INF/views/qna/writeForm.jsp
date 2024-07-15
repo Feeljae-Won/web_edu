@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>일반 게시판 글등록</title>
+<title>${headTitle }</title>
 <!-- 라이브러리 등록 -->
 <!-- 라이브러리 필요하다. 웹라이브러리(js 라이브러리)
 	1. 다운로드 : jquery.com : 내 서버에 파일을 둔다.
@@ -87,29 +87,26 @@
 <body>
 	<div class="container p-3 my-3 bg-dark text-white"
 		style="border-radius: 10px 10px 10px 10px; hieght: 200px;">
-			<i class="fa fa-caret-right"></i> 일반 게시판 글 등록
+			<i class="fa fa-caret-right"></i><b> ${headTitle }</b>
 		<hr>
 		<form action="write.do" method="post" id="writeForm">
+		
+		<!-- 페이지 정보 넘기기 -->
 		<input name="perPageNum" value= "${param.perPageNum} " type="hidden">
+		<!-- 질문답변 운영 정보 -->
+		<input name="refNo" value= "${vo.refNo}" type="hidden">
+		<input name="ordNo" value= "${vo.ordNo +1}" type="hidden">
+		<input name="levNo" value= "${(empty vo)?0:vo.levNo +1}" type="hidden">
+		<input name="parentNo" value= "${vo.no}" type="hidden">
 
 			<div class="form-group">
-				<label for="title"><b>제목</b></label> <input type="text"
+				<label for="title"><b>제목</b></label> <input type="text" required
 					class="form-control" placeholder="제목 입력" id="title" name="title">
 			</div>
 			<div class="form-group">
 				<label for="content"><b>내용</b></label>
-				<textarea class="form-control" rows="7" id="content" name="content"
+				<textarea class="form-control" rows="12" id="content" name="content" required
 					placeholder="내용 입력"></textarea>
-			</div>
-			<div class="form-group">
-				<label for="writer"><b>작성자</b></label> <input type="text"
-					class="form-control" placeholder="작성자 입력" id="writer" name="writer">
-			</div>
-			<div class="form-inline">
-				<input type="password" class="form-control" placeholder="비밀번호 입력"
-					id="pw" name="pw"> <input type="password"
-					class="form-control" placeholder="비밀번호 확인 입력" id="pw2"
-					style="margin: 0px 0px 0px 10px;">
 			</div>
 			<hr>
 			<div>

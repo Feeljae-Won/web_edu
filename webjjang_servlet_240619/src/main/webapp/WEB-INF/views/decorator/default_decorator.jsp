@@ -87,6 +87,14 @@ article {
 }
 </style>
 <script type="text/javascript">
+	$(function() {
+		// 취소 버튼 이벤트
+		$(".cancelBtn").click(function() {
+			history.back();
+		});
+	});
+</script>
+<script type="text/javascript">
 	$(document).ready(function() {
 	});
 </script>
@@ -133,8 +141,8 @@ article {
 					<li class="nav-item ${( module == '/image')?'active' : ''}">
 						<a class="nav-link" href="/image/list.do">Gallery</a>
 					</li>
-					<li class="nav-item ${( module == '/qna_board')?'active' : ''}">
-						<a class="nav-link" href="/qna_board/list.do">QnA</a>
+					<li class="nav-item ${( module == '/qna')?'active' : ''}">
+						<a class="nav-link" href="/qna/list.do">QnA</a>
 					</li>
 					<c:if test="${!empty login && login.gradeNo == 9 }">
 						<li class="nav-item ${( module == '/member')?'active' : ''}">
@@ -240,6 +248,15 @@ article {
 				<p>
 				<h6 style="text-shadow: 1px 1px 2px black; text-align: center;">Click
 					to Notice!</h6>
+			</div>
+		</c:if>
+		<c:if test="${fn:contains(requestURI, '/qna')}">
+			<div class="jumbotron text-white"
+				style="margin-bottom: 0; background-image: url('/upload/image/qna-color.jpg'); background-size: cover; background-position: center;"
+			>
+				<h1 style="text-shadow: 3px 3px 4px black; text-align: center;">Q n A</h1>
+				<p>
+				<h6 style="text-shadow: 1px 1px 2px black; text-align: center;">Question &amp; Answer</h6>
 			</div>
 		</c:if>
 	</header>

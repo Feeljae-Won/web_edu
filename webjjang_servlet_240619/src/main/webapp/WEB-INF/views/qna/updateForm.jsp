@@ -91,7 +91,7 @@
 				<button type="reset" class="btn btn-secondary">
 					<b>Reset</b>
 				</button>
-				<button type="button" class="btn btn-danger cancelBtn">
+				<button type="button" class="btn btn-danger cancelBtn" onclick="history.back()">
 					<b>Cancel</b>
 				</button>
 			</div>

@@ -266,13 +266,9 @@
 				<button type="reset" class="btn btn-secondary">
 					<b>Reset</b>
 				</button>
-				<a
-					href="list.do?page=${param.page}&perPageNum=${para.perPageNum}&key=${param.key}&word=${param.word}"
-				>
 					<button type="button" class="btn btn-danger cancelBtn">
 						<b>Cancel</b>
 					</button>
-				</a>
 			</div>
 		</form>
 	</div>
