@@ -1,11 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"
 %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>일반 게시판 글보기</title>
+<title>질문답변 글보기</title>
 <style type="text/css">
 #deleteDiv {
 	display: none;
@@ -46,68 +47,42 @@
 
 </head>
 <body>
-	<%-- 	글 번호 : ${param.no } 조회수 : ${param.inc } --%>
 	<div class="container p-3 my-3 bg-dark text-white"
 		style="border-radius: 10px 10px 10px 10px; hieght: 200px;"
 	>
 		<div class="float-right">
-			<a
-				href="/board/updateForm.do?no=${vo.no}&title=${vo.title}&content=${vo.content}&writer=${vo.writer}
-				&page=${param.page}&perPageNum=${para.perPageNum}&key=${param.key}&word=${param.word}"
-				class="btn btn-light"
-			>
-				<b>Update</b>
-			</a>
-			<!-- 			<button class="btn btn-danger" id="deleteBtn"><b>Delete</b></button> -->
-			<!-- 삭제 버튼 Modal 적용 -->
-			<button type="button" class="btn btn-danger" id="deleteBtn">
-				<b>Delete</b>
-			</button>
-
-			<a
-				href="list.do?page=${param.page}&perPageNum=${para.perPageNum}&key=${param.key}&word=${param.word}"
-			>
-				<button type="button" class="btn btn-secondary cancelBtn">
-					<b>list</b>
-				</button>
+			
+			<a href="list.do?${pageObject.pageQuery}" class="btn btn-secondary">
+				<b>리스트</b>
 			</a>
 		</div>
-		<i class="fa fa-caret-right"></i> <b>${vo.no }.</b> ${vo.title }
+		<b>Q. 질문 글</b>
 		<p>
 		<hr>
-		<table class="table"
-			style="text-align: center; border-radius: 10px; border-style: hidden;"
-		>
-			<thead class="thead-dark">
-				<tr>
-					<th class="thead-dark" style="border-radius: 10px 0px 0px 0px;">번호</th>
-					<td class="dataRow table-light">${vo.no }</td>
-					<th class="thead-dark">제목</th>
-					<td class="dataRow table-light" colspan="10"
-						style="border-radius: 0px 10px 0px 0px;"
-					>${vo.title }</td>
-				</tr>
-			<thead class="thead-dark">
-				<tr>
-					<th class="thead-dark">작성자</th>
-					<td class="dataRow table-light" colspan="6">${vo.writer }</td>
-					<th class="thead-dark">작성일</th>
-					<td class="dataRow table-light">${vo.writeDate }</td>
-					<th class="thead-dark">조회수</th>
-					<td class="dataRow table-light">${vo.hit }</td>
-				</tr>
-			<thead class="thead-dark">
-				<tr>
-					<td colspan="12" class="dataRow table-light"
-						style="height: 500px; text-align: left; border-radius: 0px 0px 10px 10px;"
-					><pre>${vo.content}</pre></td>
-				</tr>
-			</thead>
-		</table>
-		<hr>
+		<div class="card text-dark">
+			<div class="card-header">
+				<span class="float-right">${vo.writeDate }</span>
+				<b><i class="fa fa-question-circle"></i> ${vo.no }.</b> ${vo.title }
+			</div>
+			<div class="card-body">
+				<pre>${vo.content }</pre>
+			</div>
+			<div class="card-footer">
+				<c:if test="${!empty login && vo.id != login.id }">
+				<a href="answerForm.do?no=${vo.no }&perPageNum=${param.perPageNum}"
+					class="btn btn-light float-right"
+				>
+					<b>답변하기</b>
+				</a>
+				</c:if>
+				 <b>작성자 : </b>${vo.name }(${vo.id })
+			</div>
+		</div>
+		<br>
+
 
 		<!-- 댓글 처리 시작 -->
-		<jsp:include page="reply.jsp" />
+		<%-- 		<jsp:include page="reply.jsp" /> --%>
 		<!-- 댓글 처리 끝 -->
 
 

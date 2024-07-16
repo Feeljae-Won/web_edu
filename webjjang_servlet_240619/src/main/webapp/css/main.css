@@ -23,6 +23,10 @@
 	background: #e0e0e0;
 	cursor: pointer;
 }
+.qnaLink:hover {
+	background: #e0e0e0;
+	cursor: pointer;
+}
 
 .module {
 	padding:15px 5px;

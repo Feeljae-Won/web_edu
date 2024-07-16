@@ -459,7 +459,7 @@ public class MemberDAO extends DAO {
 
 	// 6-2. 로그인 최근 접속일 업데이트
 	// NoticeController - (execute) - NoticeListService - Notice.DAO.increase()]
-	public int conUpdate(LoginVO vo) throws Exception {
+	public int conUpdate(String id) throws Exception {
 
 		// 결과를 저장할 수 있는 변수 선언.
 		int result = 0;
@@ -472,8 +472,7 @@ public class MemberDAO extends DAO {
 			System.out.println("sql : " + CONUPDATE);
 			// 4. 실행 객체 선언 & 데이터 세팅
 			pstmt = con.prepareStatement(CONUPDATE);
-			pstmt.setString(1, vo.getId());
-			pstmt.setString(2, vo.getPw());
+			pstmt.setString(1, id);
 			// 5. 실행 객체 실행 -> executeUpdate() -> int 결과가 나옴.
 			result = pstmt.executeUpdate();
 			System.out.println("업데이트? : " + result);
@@ -582,6 +581,6 @@ public class MemberDAO extends DAO {
 	final String LOGIN = "select m.id, m.name, m.gradeNo, g.gradeName, m.photo, m.newMsgCnt "
 			+ " from member m, grade g " + " where (id = ? and pw = ? and status = '정상') and (g.gradeNo = m.gradeNo)";
 
-	final String CONUPDATE = "update member set conDate = sysDate where id = ? and pw = ?";
+	final String CONUPDATE = "update member set conDate = sysDate where id = ?";
 
 } // end of class

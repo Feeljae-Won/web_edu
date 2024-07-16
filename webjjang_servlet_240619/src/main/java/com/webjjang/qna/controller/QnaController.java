@@ -10,7 +10,6 @@ import com.webjjang.member.vo.LoginVO;
 import com.webjjang.qna.vo.QnaVO;
 import com.webjjang.util.exe.Execute;
 import com.webjjang.util.page.PageObject;
-import com.webjjang.util.page.ReplyPageObject;
 
 // Board Module 에 맞는 메뉴 선택 , 데이터 수집(기능별), 예외 처리
 public class QnaController {
@@ -61,30 +60,27 @@ public class QnaController {
 				break;
 				
 				
-			case "/board/view.do":
-				System.out.println("2.일반게시판 글보기");
-				// 1. 조회수 1증가(글보기), 2. 일반게시판 글보기 데이터 가져오기 : 글보기, 수정할 때
+			case "/qna/view.do":
+				System.out.println("2. 질문답변 글보기");
+				// 1. 일반게시판 글보기 데이터 가져오기 : 글보기, 수정할 때
 				// 넘어 오는 글 번호와 조회수 수집 한다. (데이터는 request 안에 들어 있다.)
 				String strNo = request.getParameter("no");
-				String strInc = request.getParameter("inc");
 				no = Long.parseLong(strNo);
-				Long inc = Long.parseLong(strInc);
-				// 전달 데이터 - 글번호, 조회수 증가 여부(1 : 증가, 0: 증가 안함) : 배열 또는 Map
-				result = Execute.execute(Init.get(uri), new Long[] {no, inc});
 				
+				// 전달 데이터 - 글번호
+				result = Execute.execute(Init.get(uri), no);
 				// 가져온 데이터를 JSP로 보내기 위해서 request에 담는다.
 				request.setAttribute("vo", result);
 				
-				// 댓글 페이지 객체
-				// 데이터 전달 - page / perPageNum / no / replyPage / replayPerPageNum
-				ReplyPageObject replyPageObject = ReplyPageObject.getInstance(request);
+				// 페이지 객체 - 수정, 리스트로 가기에서 페이지 정보가 필요
+				pageObject = PageObject.getInstance(request);
+				request.setAttribute("pageObject", pageObject);
 				
-				// 가져온 댓글 데이터 request에 담기
-				request.setAttribute("replyList", Execute.execute(Init.get("/boardreply/list.do"), replyPageObject));
-				// 댓글 페이지 객체 담기
-				request.setAttribute("replyPageObject", replyPageObject);
+				// pageObject 데이터 확인
+				System.out.println("QnaController.execute().pageObject : " + pageObject);
 				
-				jsp = "board/view";
+				
+				jsp = "qna/view";
 				break;
 			
 			case "/qna/questionForm.do":
@@ -100,6 +96,13 @@ public class QnaController {
 				
 				request.setAttribute("headTitle", "답변하기");
 				// 넘어오는 글 번호에 따른 데이터를 가져와서 request애 저장한다.
+				strNo = request.getParameter("no");
+				no = Long.parseLong(strNo);
+				
+				// 전달 데이터 - 글번호
+				result = Execute.execute(Init.get("/qna/view.do"), no);
+				// 가져온 데이터를 JSP로 보내기 위해서 request에 담는다.
+				request.setAttribute("vo", result);
 				
 				jsp = "qna/writeForm";
 				break;
@@ -129,14 +132,11 @@ public class QnaController {
 				// 답변인 경우의 처리
 				if (strRefNo != null && !strRefNo.equals("")) {
 					vo.setRefNo(Long.parseLong(strRefNo));
+					vo.setParentNo(Long.parseLong(strParentNo));
 					vo.setQuestion(false); // 답변
 				} else {
 					vo.setQuestion(true); // 질문
-					
 				}
-				// 넘길 때 no를 parentNo로 넘김.
-				if (strParentNo != null && !strParentNo.equals(""))
-					vo.setParentNo(Long.parseLong(strParentNo));
 				
 				// [QnaController] - QnaWriteService - QnaDAO.writer(vo)
 				Execute.execute(Init.get(uri), vo);
@@ -154,22 +154,22 @@ public class QnaController {
 				
 				break;
 			
-			case "/board/updateForm.do":
-				System.out.println("4-1. 글수정 폼으로 이동");
+			case "/qna/updateForm.do":
+				System.out.println("4-1. 질문답변 수정 폼으로 이동");
 				// 사용자가 -> 서버 : 글번호 데이터 수집
 				no = Long.parseLong(request.getParameter("no"));
 				
-				// no에 맞는 데이터 가져오기 - DB - BoardViewSerivce
-				result = Execute.execute(Init.get("/board/view.do"), new Long[] {no, 0L});
+				// no에 맞는 데이터 가져오기 - DB - QnaViewSerivce
+				result = Execute.execute(Init.get("/qna/view.do"), no);
 				
 				// 가져온 데이터를 JSP로 보내기 위해서 request에 담는다.
 				request.setAttribute("vo", result);
 				
 				// jsp 정보
-				jsp = "board/updateForm";
+				jsp = "qna/updateForm";
 				break;
 				
-			case "/board/update.do":
+			case "/qna/update.do":
 				System.out.println("4-2. 게시판 글수정 처리");
 				
 				// 수정할 글 번호를 받는다. - 데이터 수집
@@ -185,30 +185,29 @@ public class QnaController {
 				vo.setTitle(title);
 				vo.setContent(content);
 				
-				// [BoardController] - BoardWriteService - BoardDAO.writer(vo)
+				// [QnaController] - QnaWriteService - QnaDAO.update(vo)
 				result = Execute.execute(Init.get(uri), vo);
 				
 				// 페이지 정보 받기 & uri에 붙이기
 				pageObject = PageObject.getInstance(request);
 				System.out.println(pageObject);
 				// 글보기로 자동 이동하기
-				jsp = "redirect:view.do?no=" + no + "&inc=0"
-						+ "&" + pageObject.getPageQuery(); 
+				jsp = "redirect:view.do?no=" + no + "&" + pageObject.getPageQuery(); 
 				
-				session.setAttribute("msg", "글 수정이 성공적으로 처리 되었습니다.");
+				session.setAttribute("msg", "질문답변 수정이 성공적으로 처리 되었습니다.");
 				
 				break;
 				
 				
-			case "/board/delete.do":
+			case "/qna/delete.do":
 				System.out.println("5.일반게시판 글삭제");
 				
 				// 데이터 수집 - DB에서 실행에 필요한 데이터 - 글 번호, 비밀번호 - BoardVO
-				BoardVO deleteVO = new BoardVO();
+				QnaVO deleteVO = new QnaVO();
 				strNo = request.getParameter("no");
 				no = Long.parseLong(strNo);
 				deleteVO.setNo(no);
-				deleteVO.setPw(request.getParameter("pw"));
+				deleteVO.setId(id);
 				
 				// DB 처리
 				int result1 = (int) Execute.execute(Init.get(uri),deleteVO);
@@ -220,9 +219,9 @@ public class QnaController {
 				jsp = "redirect:list.do" + "?perPageNum=" + request.getParameter("perPageNum");
 				
 				if(result1 == 1) {
-					session.setAttribute("msg", "글 삭제가 성공적으로 처리 되었습니다.");
+					session.setAttribute("msg", "질문답변 삭제가 성공적으로 처리 되었습니다.");
 				} else {
-					session.setAttribute("msg", "글 삭제가 처리되지 않았습니다. [비밀번호가 틀립니다.]");
+					session.setAttribute("msg", "질문답변 삭제가 처리되지 않았습니다. 글 번호를 다시 확인해 주세요.");
 				}
 				break;
 				

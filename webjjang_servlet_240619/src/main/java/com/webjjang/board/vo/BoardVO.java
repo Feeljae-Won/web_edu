@@ -10,6 +10,7 @@ public class BoardVO {
 	private String writeDate;
 	private Long hit;
 	private String pw;
+	private Long rnum;
 	
 	// setter, getter
 	public Long getNo() {return no;}
@@ -33,11 +34,14 @@ public class BoardVO {
 	public String getPw() {return pw;}
 	public void setPw(String pw) {this.pw = pw;}
 	
+	public Long getRnum() {return rnum;}
+	public void setRnum(Long rnum) {this.rnum = rnum;}
+	
 	// toString - 데이터 확인용 -> 마우스 우클릭 -> 제너레이터
 	@Override
 	public String toString() {
 		return "BoardVO [no=" + no + ", title=" + title + ", content=" + content + ", writer=" + writer + ", writeDate="
-				+ writeDate + ", hit=" + hit + ", pw=" + pw + "]";
+				+ writeDate + ", hit=" + hit + ", pw=" + pw + ", rnum=" + rnum + "]";
 	}
 
 }

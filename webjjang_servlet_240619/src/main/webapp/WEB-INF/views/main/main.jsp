@@ -26,6 +26,12 @@
 			<jsp:include page="imageList.jsp"/>
 		</div>
 	</div>
+	<hr>
+	<div class="row">
+		<div class="col-md-12 module">
+			<jsp:include page="qnaList.jsp"/>
+		</div>
+	</div>
 </div>
 <p>
 </body>

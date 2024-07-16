@@ -51,6 +51,7 @@ public class BoardDAO extends DAO {
 					vo.setWriter(rs.getString("writer"));
 					vo.setWriteDate(rs.getString("writeDate"));
 					vo.setHit(rs.getLong("hit"));
+					vo.setRnum(rs.getLong("rnum"));
 
 					// vo -> list
 					list.add(vo);
@@ -104,6 +105,61 @@ public class BoardDAO extends DAO {
 		return totalRow;
 		
 	} // end of getTotalRow
+	
+	// 1-3. 리스트 처리
+		// BoardController - (execute) - BoardListService - [BoardDAO.list()]
+		public List<BoardVO> rnumList(Long rnum) throws Exception {
+			// 결과를 저장할 수 있는 변수 선언.
+			List<BoardVO> list = null;
+
+			try {
+				// 1. 드라이버 확인 - DB 클래스에서 확인 완료
+				// 2. 오라클 접속
+				con = DB.getConnection();
+				// 3. sql 문 - 아래 LIST - 콘솔 확인하고 여기에 쿼리에 해당되는 LIST 출력
+				System.out.println("sql : " + RNUMLIST);
+				// 4. 실행 객체 선언
+//				pstmt = con.prepareStatement(LIST);
+				pstmt = con.prepareStatement(RNUMLIST);
+				// 검색에 대한 데이터 세팅 - list() 만 사용
+				pstmt.setLong(1, rnum);
+				pstmt.setLong(2, rnum);
+				// 5. 실행 객체 실행
+				rs = pstmt.executeQuery();
+				// 6. 데이터 표시 또는 담기
+				if (rs != null) {
+					while (rs.next()) {
+						// rs -> VO -> list
+						// list 가 null 이면 생성해서 저장할 수 있게 해줘야 한다.
+						if (list == null)
+							list = new ArrayList<BoardVO>();
+						// rs -> VO
+						BoardVO rvo = new BoardVO();
+						rvo.setRnum(rs.getLong("rnum"));
+						rvo.setNo(rs.getLong("no"));
+						rvo.setTitle(rs.getString("title"));
+						rvo.setWriter(rs.getString("writer"));
+						rvo.setWriteDate(rs.getString("writeDate"));
+						rvo.setHit(rs.getLong("hit"));
+						rvo.setRnum(rs.getLong("rnum"));
+
+						// vo -> list
+						list.add(rvo);
+					} // end of while
+				} // end of if
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw e; // 오류 나면 던진다
+			} finally {
+				// 7. 닫기
+				DB.close(con, pstmt, rs);
+			} // end of try ~ finally
+
+			// 결과 데이터를 리턴 해 준다.
+			return list;
+
+		} // end of List
 
 	// 2-1. 상세보기 - 조회수 1 증가
 	// BoardController - (execute) - BoardListService - Board.DAO.increase()]
@@ -311,10 +367,17 @@ public class BoardDAO extends DAO {
 	// 실행할 쿼리를 정의해 놓은 변수 선언
 
 	// LIST의 페이지 처리 절차 - 원본데이터(select) -> 순서 번호(select) -> 해당 페이지 데이터만 가져온다.(select)
-	final String LIST = " select no, title, writer, writeDate, hit " + " from ("
+	final String LIST = " select rnum, no, title, writer, writeDate, hit " + " from ("
 			+ " select rownum rnum, no, title, writer, writeDate, hit" + " from (" + " select no, title, writer,  "
 			+ " to_char(writeDate, 'yyyy-mm-dd') writeDate, hit " + " from board ";
 			// 여기에 검색이 있어야 한다.
+	
+	final String RNUMLIST = "select rnum, no, title, writer, writeDate, hit "
+			+ " from (select rownum rnum, no, title, writer, writeDate, hit"
+				+ " from (select no, title, writer, to_char(writeDate, 'yyyy-mm-dd') writeDate, hit"
+					+ " from board order by no desc) ) "
+			+ " where rnum = ? -1 "
+				+ " or rnum = ? +1 ";
 	
 
 	// 검색이 있는 경우 TOTALROW + search

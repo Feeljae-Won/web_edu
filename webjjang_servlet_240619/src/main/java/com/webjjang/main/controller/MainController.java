@@ -73,6 +73,13 @@ public class MainController {
 				// 가져온 데이터를 request에 저장 -> jsp 까지 전달 된다.
 				request.setAttribute("imageList", result);
 				
+				// 질문답변 게시판의 데이터 가져오기
+				pageObject.setPerPageNum(5);
+				// [MainController] - (Execute) - ImageListService - ImageDAO.list()
+				result = Execute.execute(Init.get("/qna/list.do"), pageObject);
+				// 가져온 데이터를 request에 저장 -> jsp 까지 전달 된다.
+				request.setAttribute("qnaList", result);
+				
 				// /WEB-INF/views/  + main/main  +  .jsp
 				jsp = "main/main";
 				break;

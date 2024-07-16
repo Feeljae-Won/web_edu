@@ -55,6 +55,16 @@
 		<url-pattern>*.do</url-pattern>
 	</filter-mapping>
 	
+	<filter>
+		<filter-name>conUpdate</filter-name>
+		<filter-class>com.webjjang.util.filter.ConDateUpdateFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>conUpdate</filter-name>
+		<url-pattern>*.do</url-pattern>
+	</filter-mapping>
+	
 	<!-- 예외와 error 처리 - erro-page tag 설정 
 		- error-code : 브라우저나 통신에서 보여지는 에러 코드로 서버에서 처리
 		- exception-type : 내부 오류인 500의 Exception의 종류에 따라 처리할 수 있다. -->

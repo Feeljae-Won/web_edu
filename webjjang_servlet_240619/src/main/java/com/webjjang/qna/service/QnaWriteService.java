@@ -27,14 +27,8 @@ public class QnaWriteService implements Service {
 		} else {
 			// 답변인 경우 - refNo와 순서번호와 같거나 큰 데이터의 순서 번호를 1증가 시켜준다.
 			dao.increaseOrdNo(vo);
-			
 		}
 		
-		
-		// DB board에서 조회수 1증가 하고 글보기 데이터 가져와서 리턴
-		
-		
 		return dao.write(vo);
-
 	}
 }

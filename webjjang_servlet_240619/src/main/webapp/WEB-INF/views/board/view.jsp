@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"
 %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,6 +17,16 @@
 	$(function() {
 
 		// 이벤트 처리
+		$(".dataRow").click(function() {
+// 			alert("click --------");
+			// 글 번호 수집
+			let no = $(this).find(".no").text();
+			let rnum = $(this).find(".rnum").data("data");
+			console.log("no = " + no);
+			location="view.do?no=" + no + "&inc=1&rnum=" + rnum
+					+"&${pageObject.pageQuery}";
+		})
+		
 		$("#deleteBtn").click(function() {
 			// 			$(this).attr("disabled",true);
 			// 			$("#deleteDiv").show();
@@ -43,7 +54,12 @@
 
 	});
 </script>
-
+<style type="text/css">
+.dataRow:hover {
+	background: white;
+	cursor: pointer;
+}
+</style>
 </head>
 <body>
 	<%-- 	글 번호 : ${param.no } 조회수 : ${param.inc } --%>
@@ -81,28 +97,48 @@
 			<thead class="thead-dark">
 				<tr>
 					<th class="thead-dark" style="border-radius: 10px 0px 0px 0px;">번호</th>
-					<td class="dataRow table-light">${vo.no }</td>
+					<td class="table-light">${vo.no }</td>
 					<th class="thead-dark">제목</th>
-					<td class="dataRow table-light" colspan="10"
+					<td class="table-light" colspan="10"
 						style="border-radius: 0px 10px 0px 0px;"
 					>${vo.title }</td>
 				</tr>
 			<thead class="thead-dark">
 				<tr>
 					<th class="thead-dark">작성자</th>
-					<td class="dataRow table-light" colspan="6">${vo.writer }</td>
+					<td class="table-light" colspan="6">${vo.writer }</td>
 					<th class="thead-dark">작성일</th>
-					<td class="dataRow table-light">${vo.writeDate }</td>
+					<td class="table-light">${vo.writeDate }</td>
 					<th class="thead-dark">조회수</th>
-					<td class="dataRow table-light">${vo.hit }</td>
+					<td class="table-light">${vo.hit }</td>
 				</tr>
 			<thead class="thead-dark">
 				<tr>
-					<td colspan="12" class="dataRow table-light"
+					<td colspan="12" class="table-light"
 						style="height: 500px; text-align: left; border-radius: 0px 0px 10px 10px;"
 					><pre>${vo.content}</pre></td>
 				</tr>
 			</thead>
+		</table>
+		<!-- 이전글 다음글 -->
+		<hr>
+		<table class="table table-hover"
+			style="text-align: center; border-radius: 10px; border-style: hidden;">
+			<c:forEach items="${rnumList }" var="rvo">
+				<tr class="dataRow table-light">
+					<th style="width:10%">
+						<c:if test="${param.rnum > rvo.rnum }">다음글
+						</c:if>
+						<c:if test="${param.rnum < rvo.rnum }">이전글
+						</c:if>
+					</th>
+					<td class="no" style="width:10%"><b>${rvo.no }</b></td>
+					<td style="width:50%; text-align:left;">${rvo.title }</td>
+					<td style="width:15%">${rvo.writer }</td>
+					<td style="width:10%">${rvo.writeDate }</td>
+					<td style="width:5%" class="rnum" data-data="${rvo.rnum }">${rvo.hit }</td>
+				</tr>
+			</c:forEach>
 		</table>
 		<hr>
 

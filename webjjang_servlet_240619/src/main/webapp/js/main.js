@@ -6,7 +6,7 @@
 	$(".dataRow").click(function() {
 //		alert("클릭");
 		let no = $(this).find(".no").text();
-		console.log("no = "	+ no);
+//		console.log("no = "	+ no);
 //		alert($(this).hasClass());
 		// 어떤 모듈인지 확인하기
 		if($(this).hasClass("board")){
@@ -18,6 +18,9 @@
 		} else if($(this).hasClass("notice")){
 //			alert("공지사항 게시판 클릭" + $(this));
 			location="/notice/view.do?no=" + no ;
+		} else if($(this).hasClass("qna")){
+//			alert("공지사항 게시판 클릭" + $(this));
+			location="/qna/view.do?no=" + no ;
 		};
 	});
  });

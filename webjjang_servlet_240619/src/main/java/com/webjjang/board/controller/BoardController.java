@@ -59,13 +59,20 @@ public class BoardController {
 				// 넘어 오는 글 번호와 조회수 수집 한다. (데이터는 request 안에 들어 있다.)
 				String strNo = request.getParameter("no");
 				String strInc = request.getParameter("inc");
+				String strRnum = request.getParameter("rnum");
+				System.out.println("BoardController.view() rnum = " + strRnum);
 				no = Long.parseLong(strNo);
 				Long inc = Long.parseLong(strInc);
+				Long rnum = Long.parseLong(strRnum);
 				// 전달 데이터 - 글번호, 조회수 증가 여부(1 : 증가, 0: 증가 안함) : 배열 또는 Map
 				result = Execute.execute(Init.get(uri), new Long[] {no, inc});
 				
 				// 가져온 데이터를 JSP로 보내기 위해서 request에 담는다.
 				request.setAttribute("vo", result);
+				
+				// DB 에서 데이터 가져오기 - 가져온 데이터는 LIST<BoardVO>
+				Object rnumResult = Execute.execute(Init.get("/board/rnumList.do"), rnum);
+				request.setAttribute("rnumList", rnumResult);
 				
 				// 댓글 페이지 객체
 				// 데이터 전달 - page / perPageNum / no / replyPage / replayPerPageNum

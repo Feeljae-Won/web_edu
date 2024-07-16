@@ -1,6 +1,7 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -87,9 +88,37 @@
 <body>
 	<div class="container p-3 my-3 bg-dark text-white"
 		style="border-radius: 10px 10px 10px 10px; hieght: 200px;">
-			<i class="fa fa-caret-right"></i><b> ${headTitle }</b>
+		<a href="list.do?${pageObject.pageQuery}" class="btn btn-secondary float-right">
+				<b>리스트</b>
+		</a>
+		<b> Q. 질문 글</b>
 		<hr>
+		<c:if test="${!empty vo }">
+		<div class="card text-dark">
+			<div class="card-header">
+				<span class="float-right">${vo.writeDate }</span>
+				<b><i class="fa fa-question-circle"></i> ${vo.no }.</b> ${vo.title }
+			</div>
+			<div class="card-body">
+				<pre>${vo.content }</pre>
+			</div>
+			<div class="card-footer">
+				<c:if test="${!empty login && vo.id != login.id }">
+				<a href="answerForm.do?no=${vo.no }&perPageNum=${param.perPageNum}"
+					class="btn btn-light float-right"
+				>
+					<b>답변하기</b>
+				</a>
+				</c:if>
+				 <b>작성자 : </b>${vo.name }(${vo.id })
+			</div>
+		</div>		
+		</c:if>
+	</div>
+	<div class="container p-3 my-3 bg-dark text-white"
+		style="border-radius: 10px 10px 10px 10px; hieght: 200px;">
 		<form action="write.do" method="post" id="writeForm">
+		<b>A. ${headTitle }</b><p>
 		
 		<!-- 페이지 정보 넘기기 -->
 		<input name="perPageNum" value= "${param.perPageNum} " type="hidden">
@@ -100,24 +129,39 @@
 		<input name="parentNo" value= "${vo.no}" type="hidden">
 
 			<div class="form-group">
-				<label for="title"><b>제목</b></label> <input type="text" required
-					class="form-control" placeholder="제목 입력" id="title" name="title">
+				<label for="title"><b><i class="fa fa-caret-right"></i> 제목</b></label> <input type="text" required
+					class="form-control" placeholder="제목 입력" id="title" name="title"
+					value="${(empty vo)?'':('[답변] ' += vo.title) }">
 			</div>
 			<div class="form-group">
-				<label for="content"><b>내용</b></label>
-				<textarea class="form-control" rows="12" id="content" name="content" required
-					placeholder="내용 입력"></textarea>
+				<label for="content"><b><i class="fa fa-caret-right"></i> 내용</b></label>
+				<c:if test="${empty vo }">
+					<textarea class="form-control" rows="12" id="content" name="content" required
+						placeholder="내용 입력"></textarea>
+				</c:if>
+				<c:if test="${!empty vo }">
+					<textarea class="form-control" rows="12" id="content" name="content" required
+						placeholder="내용 입력">
+
+
+
+------------------------ 질문 글 ---------------------------
+> 작성자 : ${vo.name }(${vo.id })      > 작성일 : ${vo.writeDate}
+-----------------------------------------------------------
+${vo.content }
+</textarea>
+				</c:if>
 			</div>
 			<hr>
 			<div>
 				<button type="submit" class="btn btn-light">
-					<b>Confirm</b>
+					<b>답변하기</b>
 				</button>
 				<button type="reset" class="btn btn-secondary">
-					<b>Reset</b>
+					<b>초기화</b>
 				</button>
 				<button type="button" class="btn btn-danger cancelBtn">
-					<b>Cancel</b>
+					<b>취소</b>
 				</button>
 			</div>
 		</form>

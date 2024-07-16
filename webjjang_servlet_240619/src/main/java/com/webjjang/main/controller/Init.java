@@ -6,6 +6,7 @@ import java.util.Map;
 import com.webjjang.board.dao.BoardDAO;
 import com.webjjang.board.service.BoardDeleteService;
 import com.webjjang.board.service.BoardListService;
+import com.webjjang.board.service.BoardRnumListService;
 import com.webjjang.board.service.BoardUpdateService;
 import com.webjjang.board.service.BoardViewService;
 import com.webjjang.board.service.BoardWriteService;
@@ -27,6 +28,7 @@ import com.webjjang.member.dao.MemberDAO;
 import com.webjjang.member.service.MemberChangeGradeService;
 import com.webjjang.member.service.MemberChangeStatusService;
 import com.webjjang.member.service.MemberCheckIdService;
+import com.webjjang.member.service.MemberConUpdateService;
 import com.webjjang.member.service.MemberListService;
 import com.webjjang.member.service.MemberLoginService;
 import com.webjjang.member.service.MemberWriteService;
@@ -62,6 +64,7 @@ public class Init {
 		
 		// service 생성
 		serviceMap.put("/board/list.do", new BoardListService());
+		serviceMap.put("/board/rnumList.do", new BoardRnumListService());
 		serviceMap.put("/board/view.do", new BoardViewService());
 		serviceMap.put("/board/write.do", new BoardWriteService());
 		serviceMap.put("/board/update.do", new BoardUpdateService());
@@ -69,6 +72,7 @@ public class Init {
 
 		// 조립 dao -> service
 		serviceMap.get("/board/list.do").setDAO(daoMap.get("boardDAO"));
+		serviceMap.get("/board/rnumList.do").setDAO(daoMap.get("boardDAO"));
 		serviceMap.get("/board/view.do").setDAO(daoMap.get("boardDAO"));
 		serviceMap.get("/board/write.do").setDAO(daoMap.get("boardDAO"));
 		serviceMap.get("/board/update.do").setDAO(daoMap.get("boardDAO"));
@@ -119,6 +123,8 @@ public class Init {
 		serviceMap.put("/member/list.do", new MemberListService());
 		serviceMap.put("/member/changeGrade.do", new MemberChangeGradeService());
 		serviceMap.put("/member/changeStatus.do", new MemberChangeStatusService());
+		// MemberController에서 들어오지 않고 필터에서 들어온다. (ConDateUpdateFilter)
+		serviceMap.put("/member/conUpdate.do", new MemberConUpdateService());
 		
 		// 조립
 		serviceMap.get("/member/login.do").setDAO(daoMap.get("memberDAO"));
@@ -127,6 +133,7 @@ public class Init {
 		serviceMap.get("/member/list.do").setDAO(daoMap.get("memberDAO"));
 		serviceMap.get("/member/changeGrade.do").setDAO(daoMap.get("memberDAO"));
 		serviceMap.get("/member/changeStatus.do").setDAO(daoMap.get("memberDAO"));
+		serviceMap.get("/member/conUpdate.do").setDAO(daoMap.get("memberDAO"));
 		
 		// ------------[Member 객체 생성과 조립] ------------------
 		// dao 생성
@@ -154,10 +161,12 @@ public class Init {
 		
 		// service 생성
 		serviceMap.put("/qna/list.do", new QnaListService());
+		serviceMap.put("/qna/view.do", new QnaViewService());
 		serviceMap.put("/qna/write.do", new QnaWriteService());
 
 		// 조립 dao -> service
 		serviceMap.get("/qna/list.do").setDAO(daoMap.get("qnaDAO"));
+		serviceMap.get("/qna/view.do").setDAO(daoMap.get("qnaDAO"));
 		serviceMap.get("/qna/write.do").setDAO(daoMap.get("qnaDAO"));
 
 		

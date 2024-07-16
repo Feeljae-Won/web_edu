@@ -14,8 +14,9 @@
 // 			alert("click --------");
 			// 글 번호 수집
 			let no = $(this).find(".no").text();
+			let rnum = $(this).find(".rnum").data("data");
 			console.log("no = " + no);
-			location="view.do?no=" + no + "&inc=1"
+			location="view.do?no=" + no + "&inc=1&rnum=" + rnum
 					+"&${pageObject.pageQuery}";
 		})
 		// perPageNum 처리
@@ -133,7 +134,7 @@ button:hover {
 					<td style="text-align:left;">${vo.title}</td>
 					<td>${vo.writer}</td>
 					<td>${vo.writeDate}</td>
-					<td>${vo.hit}</td>
+					<td class="rnum" data-data="${vo.rnum }">${vo.hit}</td>
 				</tr>
 			</c:forEach>
 			<tr>
