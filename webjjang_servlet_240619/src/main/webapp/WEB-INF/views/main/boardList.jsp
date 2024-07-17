@@ -19,7 +19,7 @@
 					<td class="text-truncate" style="text-align:left;">${vo.title}</td>
 					<td>${vo.writer}</td>
 					<td>${vo.writeDate}</td>
-					<td>${vo.hit}</td>
+					<td class="rnum" data-data="${vo.rnum }">${vo.hit}</td>
 				</tr>
 			</c:forEach>
 		</table>

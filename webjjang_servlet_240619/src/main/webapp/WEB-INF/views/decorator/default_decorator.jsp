@@ -85,6 +85,19 @@ article {
 	color: grey;
 	margin: 0 auto;
 }
+
+.icon-with-badge {
+	position: relative;
+	display: inline-block;
+}
+
+.icon-with-badge .badge {
+	position: absolute;
+	top: -1px;
+	right: -5px;
+	padding: 0.25em 0.5em;
+	font-size: 0.65rem;
+}
 </style>
 <script type="text/javascript">
 	$(function() {
@@ -107,9 +120,9 @@ article {
 
 		<%-- 특정 URI 패턴에 따라 Jumbotron 적용 --%>
 		<c:if test="${fn:contains(requestURI, '/main.do')}">
-			<div class="jumbotron text-white" 
-				style="margin-bottom: 0; background-image: url('/upload/image/DSCF9544.JPG'); 
-					background-size: cover; background-position: center;">
+			<div class="jumbotron text-white"
+				style="margin-bottom: 0; background-image: url('/upload/image/DSCF9544.JPG'); background-size: cover; background-position: center;"
+			>
 				<h1 style="text-shadow: 3px 3px 4px black; text-align: center;">Welcome
 					to our site!</h1>
 				<p>
@@ -150,7 +163,7 @@ article {
 						</li>
 					</c:if>
 				</ul>
-				<!-- 이곳에서 부터 오른쪽 정렬하고 싶어 -->
+				<!-- 이곳에서 부터 오른쪽 정렬 -->
 				<ul class="navbar-nav ml-auto d-flex">
 					<c:if test="${ empty login }">
 						<!-- 로그인 안했을 때 -->
@@ -167,6 +180,21 @@ article {
 					</c:if>
 					<c:if test="${ !empty login }">
 						<!-- 로그인 했을 때 -->
+						<!-- 새로운 메세지 -->
+						<li class="nav-item ">
+							<div class="icon-with-badge">
+								<a class="nav-link" href="/message/list.do">
+									<i class="fa fa-bell"></i> 
+									<c:if test="${login.newMsgCnt != 0}">
+										<span
+											class="badge badge-pill badge-danger"
+										> ${(login.newMsgCnt == 0)?"0":login.newMsgCnt } </span>
+									</c:if>
+								</a>
+							</div>
+						</li>
+
+						<!-- 사진 보여주기 처리 -->
 						<li class="nav-link ">
 							<c:if test="${empty login.photo }">
 								<i class="fa fa-user-circle"></i>
@@ -177,7 +205,6 @@ article {
 								>
 							</c:if>
 							<i class="material-icons"></i> <b> ${login.name }(${login.gradeName })</b>님
-							안녕하세요.
 						</li>
 						<li class="nav-item">
 							<a class="nav-link" href="/member/logout.do">
@@ -254,9 +281,11 @@ article {
 			<div class="jumbotron text-white"
 				style="margin-bottom: 0; background-image: url('/upload/image/qna-color.jpg'); background-size: cover; background-position: center;"
 			>
-				<h1 style="text-shadow: 3px 3px 4px black; text-align: center;">Q n A</h1>
+				<h1 style="text-shadow: 3px 3px 4px black; text-align: center;">Q
+					n A</h1>
 				<p>
-				<h6 style="text-shadow: 1px 1px 2px black; text-align: center;">Question &amp; Answer</h6>
+				<h6 style="text-shadow: 1px 1px 2px black; text-align: center;">Question
+					&amp; Answer</h6>
 			</div>
 		</c:if>
 	</header>

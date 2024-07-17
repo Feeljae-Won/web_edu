@@ -32,6 +32,9 @@ import com.webjjang.member.service.MemberConUpdateService;
 import com.webjjang.member.service.MemberListService;
 import com.webjjang.member.service.MemberLoginService;
 import com.webjjang.member.service.MemberWriteService;
+import com.webjjang.message.dao.MessageDAO;
+import com.webjjang.message.service.MessageListService;
+import com.webjjang.message.service.MessageWriteService;
 import com.webjjang.notice.dao.NoticeDAO;
 import com.webjjang.notice.service.NoticeDeleteService;
 import com.webjjang.notice.service.NoticeListService;
@@ -168,6 +171,18 @@ public class Init {
 		serviceMap.get("/qna/list.do").setDAO(daoMap.get("qnaDAO"));
 		serviceMap.get("/qna/view.do").setDAO(daoMap.get("qnaDAO"));
 		serviceMap.get("/qna/write.do").setDAO(daoMap.get("qnaDAO"));
+		
+		// ------------[메세지 객체 생성과 조립] ------------------
+		// dao 생성
+		daoMap.put("MessageDAO", new MessageDAO());
+		
+		// service 생성
+		serviceMap.put("/message/list.do", new MessageListService());
+		serviceMap.put("/message/write.do", new MessageWriteService());
+
+		// 조립 dao -> service
+		serviceMap.get("/message/list.do").setDAO(daoMap.get("MessageDAO"));
+		serviceMap.get("/message/write.do").setDAO(daoMap.get("MessageDAO"));
 
 		
 		System.out.println("Init.static 초기화 블록 ------------- 객체 생성과 로딩");

@@ -17,7 +17,7 @@
 					<!-- td : table data - 테이블 데이터 텍스트 -->
 					<td class="no">${vo.no}</td>
 					<td class="text-truncate" style="text-align:left;">${vo.title}</td>
-					<td>${vo.name}(${vo.id })</td>
+					<td>${vo.name}</td>
 					<td>${vo.writeDate}</td>
 				</tr>
 			</c:forEach>

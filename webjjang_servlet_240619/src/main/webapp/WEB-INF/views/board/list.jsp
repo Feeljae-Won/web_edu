@@ -76,7 +76,7 @@ button:hover {
 					<div class="input-group mb-8">
 						<div class="input-group-prepend">
 							<select name="key" id="key" class="form-control">
-								<option select value="t">제목</option>
+								<option selected value="t">제목</option>
 								<option value="c">내용</option>
 								<option value="w">작성자</option>
 								<option value="tc">제목 + 내용</option>

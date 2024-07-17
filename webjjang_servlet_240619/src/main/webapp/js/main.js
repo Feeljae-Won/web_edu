@@ -6,12 +6,13 @@
 	$(".dataRow").click(function() {
 //		alert("클릭");
 		let no = $(this).find(".no").text();
+		let rnum = $(this).find(".rnum").data("data");
 //		console.log("no = "	+ no);
 //		alert($(this).hasClass());
 		// 어떤 모듈인지 확인하기
 		if($(this).hasClass("board")){
 //			alert("일반 게시판 클릭");
-			location="/board/view.do?no=" + no + "&inc=1";
+			location="/board/view.do?no=" + no + "&inc=1&rnum=" + rnum;
 		} else if($(this).hasClass("image")){
 //			alert("이미지 게시판 클릭");
 			location="/image/view.do?no=" + no + "&inc=1";
