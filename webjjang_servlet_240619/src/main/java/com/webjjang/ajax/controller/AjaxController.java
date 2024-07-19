@@ -2,8 +2,11 @@ package com.webjjang.ajax.controller;
 
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.websocket.Session;
 
 import com.webjjang.main.controller.Init;
+import com.webjjang.member.vo.LoginVO;
 import com.webjjang.util.exe.Execute;
 
 // Member Module 에 맞는 메뉴 선택 , 데이터 수집(기능별), 예외 처리
@@ -17,6 +20,11 @@ public class AjaxController {
 		String jsp = null;
 		// 메뉴 입력 - uri - /member/list.do
 		String uri = request.getRequestURI();
+		
+		// 로그인 정보
+		HttpSession session = request.getSession();
+		LoginVO loginVO = (LoginVO) session.getAttribute("login");
+		if (loginVO != null) id = loginVO.getId();
 		
 		try { // 정상 처리
 		
@@ -41,6 +49,24 @@ public class AjaxController {
 				// jsp 정보 앞에 "redirect:"가 붙어 있으면 redirect를 
 				// 아니면 jsp로 forword를 시킨다.
 				jsp = "/member/checkId";
+				break;
+			case "/ajax/newMsgCnt.do":
+				System.out.println("b. 새로운 메세지 새로고침 기능");
+				
+				// 데이터 수집 - 사용자 -> 서버 : form - input - name
+				// JSP 에서 사용자가 입력한 아이디
+				
+				// [MemberController] - MemberNewMsgCntService - MemberDAO.getNewMsgC t/////////////////("id")
+				// 리턴 타입이 Object라서 String으로 캐스팅 한다.
+				// DB 서버에서 가져온 아이디 - 덮어쓰기
+				Long result = (Long) Execute.execute(Init.get(uri), id);
+				
+				// DB 에서 받아온 데이터를 request에 담는다.
+				request.setAttribute("newMsgCnt", result);
+				
+				// jsp 정보 앞에 "redirect:"가 붙어 있으면 redirect를 
+				// 아니면 jsp로 forword를 시킨다.
+				jsp = "/member/newMsgCnt";
 				break;
 				
 			default:

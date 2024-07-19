@@ -1,30 +1,34 @@
 package com.webjjang.message.service;
 
-import com.webjjang.board.dao.BoardDAO;
-import com.webjjang.board.vo.BoardVO;
 import com.webjjang.main.dao.DAO;
 import com.webjjang.main.service.Service;
+import com.webjjang.message.dao.MessageDAO;
+import com.webjjang.message.vo.MessageVO;
 
 public class MessageViewService implements Service {
 
-	private BoardDAO dao;
+	private MessageDAO dao;
 	
 	// dao setter
 	public void setDAO(DAO dao) {
-		this.dao = (BoardDAO) dao;
+		this.dao = (MessageDAO) dao;
 	}
 	
 	@Override
-	public BoardVO service(Object obj) throws Exception {
+	public MessageVO service(Object obj) throws Exception {
 		
-		// 넘어오는 데이터의 구조 obj - Long[] : obj[0] - no, obj[1] - inc
-		Long[] objs = (Long[]) obj; // 데이터를 넣은 때 Long[]로 저장했어야만 한다.
-		Long no = objs[0];
-		Long inc = objs[1];
+		// 넘어오는 데이터의 구조 obj = messageVO
+		// 받은 메세지 인 경우(vo.accepterId != null) 처리 - 받은 날짜, newMsgCnt + 1
+		MessageVO vo = (MessageVO) obj;
+		Long no = vo.getNo();
+		String id = vo.getAccepterId();
 		
-		// 1. 조회수 1증가 : inc == 1
-		if(inc == 1) dao.increase(no);
-		
+		// 받은 메시지(vo.accpeterId != null)인 경우의 처리
+		if(vo.getAccepterId() != null) {
+			// 읽음 표시 처리 - readed : 1 - null -> sysdate, readed : 0 - acceptDate 유지
+			int readed = dao.setReaded(no);
+			if(readed == 1) dao.decreaseNewMsgCnt(id);
+		}
 		return dao.view(no);
 	}
 

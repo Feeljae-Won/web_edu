@@ -31,9 +31,11 @@ import com.webjjang.member.service.MemberCheckIdService;
 import com.webjjang.member.service.MemberConUpdateService;
 import com.webjjang.member.service.MemberListService;
 import com.webjjang.member.service.MemberLoginService;
+import com.webjjang.member.service.MemberNewMsgCntService;
 import com.webjjang.member.service.MemberWriteService;
 import com.webjjang.message.dao.MessageDAO;
 import com.webjjang.message.service.MessageListService;
+import com.webjjang.message.service.MessageViewService;
 import com.webjjang.message.service.MessageWriteService;
 import com.webjjang.notice.dao.NoticeDAO;
 import com.webjjang.notice.service.NoticeDeleteService;
@@ -122,6 +124,7 @@ public class Init {
 		// service 생성
 		serviceMap.put("/member/login.do", new MemberLoginService());
 		serviceMap.put("/ajax/checkId.do", new MemberCheckIdService());
+		serviceMap.put("/ajax/newMsgCnt.do", new MemberNewMsgCntService());
 		serviceMap.put("/member/write.do", new MemberWriteService());
 		serviceMap.put("/member/list.do", new MemberListService());
 		serviceMap.put("/member/changeGrade.do", new MemberChangeGradeService());
@@ -132,6 +135,7 @@ public class Init {
 		// 조립
 		serviceMap.get("/member/login.do").setDAO(daoMap.get("memberDAO"));
 		serviceMap.get("/ajax/checkId.do").setDAO(daoMap.get("memberDAO"));
+		serviceMap.get("/ajax/newMsgCnt.do").setDAO(daoMap.get("memberDAO"));
 		serviceMap.get("/member/write.do").setDAO(daoMap.get("memberDAO"));
 		serviceMap.get("/member/list.do").setDAO(daoMap.get("memberDAO"));
 		serviceMap.get("/member/changeGrade.do").setDAO(daoMap.get("memberDAO"));
@@ -178,10 +182,12 @@ public class Init {
 		
 		// service 생성
 		serviceMap.put("/message/list.do", new MessageListService());
+		serviceMap.put("/message/view.do", new MessageViewService());
 		serviceMap.put("/message/write.do", new MessageWriteService());
 
 		// 조립 dao -> service
 		serviceMap.get("/message/list.do").setDAO(daoMap.get("MessageDAO"));
+		serviceMap.get("/message/view.do").setDAO(daoMap.get("MessageDAO"));
 		serviceMap.get("/message/write.do").setDAO(daoMap.get("MessageDAO"));
 
 		

@@ -107,10 +107,19 @@ article {
 		});
 	});
 </script>
-<script type="text/javascript">
-	$(document).ready(function() {
-	});
-</script>
+<c:if test="${ !empty login }">
+	<!-- 로그인을 했을 때 새로운 메세지를 3초마다 불러와서 세팅해 주는 처리 JS -->
+	<script type="text/javascript">
+		$(function() {
+			setInterval(function() {
+				// 서버에서 새로운 메세지 데이터를 가져와서 새로운 메세지 란에 표시한다. - Load
+// 				console.log("3초마다 자동 실행");
+				// 새로운 메세지 표시하는 곳을 선택해서 데이터를 올린다.
+				$("#newMsgCnt").load("/ajax/newMsgCnt.do");
+			}, 3000);
+		});
+	</script>
+</c:if>
 <decorator:head />
 </head>
 <body>
@@ -184,11 +193,11 @@ article {
 						<li class="nav-item ">
 							<div class="icon-with-badge">
 								<a class="nav-link" href="/message/list.do">
-									<i class="fa fa-bell"></i> 
+									<i class="fa fa-bell mr-2"></i> 
 									<c:if test="${login.newMsgCnt != 0}">
 										<span
-											class="badge badge-pill badge-danger"
-										> ${(login.newMsgCnt == 0)?"0":login.newMsgCnt } </span>
+											class="badge badge-pill badge-danger mr-2" id="newMsgCnt"
+										> ${(login.newMsgCnt == 0)?"":login.newMsgCnt } </span>
 									</c:if>
 								</a>
 							</div>

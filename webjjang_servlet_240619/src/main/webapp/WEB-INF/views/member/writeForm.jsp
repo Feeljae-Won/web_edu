@@ -143,7 +143,8 @@
 						}
 					} // 비밀번호 확인 체크 끝
 				}); // end of keyup
-				
+		
+		// ajax 를 이용한 아이디 중복 체크
 		$("#name").keyup(function(){
 			let name = $("#name").val();
 			console.log("name = " + name.length)

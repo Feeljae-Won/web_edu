@@ -78,7 +78,7 @@ public class MemberDAO extends DAO {
 	} // end of List
 	
 	// 1-2. 전체 데이터 개수 가져오기
-	// BoardController - (execute) - BoardListService - [BoardDAO.view()]
+	// MemberController - (execute) - MemberListService - [MemberDAO.view()]
 	public Long getTotalRow(PageObject pageObject) throws Exception {
 		// 결과를 저장할 수 있는 변수 선언.
 		Long totalRow = null;
@@ -284,49 +284,49 @@ public class MemberDAO extends DAO {
 	} // end of update()
 	
 	// 4-1. 회원 등급 수정 처리
-		// MemberController - (execute) - MemberChangeGradeService - Member.DAO.chageGrade()
-		public int changeGrade(MemberVO vo) throws Exception {
+	// MemberController - (execute) - MemberChangeGradeService - Member.DAO.chageGrade()
+	public int changeGrade(MemberVO vo) throws Exception {
 
-			// 결과를 저장할 수 있는 변수 선언.
-			int result = 0;
+		// 결과를 저장할 수 있는 변수 선언.
+		int result = 0;
 
-			try {
-				// 1. 드라이버 확인 - DB 클래스에서 확인 완료
-				// 2. 오라클 접속
-				con = DB.getConnection();
-				// 3. sql 문 - 아래 LIST
-				System.out.println("sql : " + CHANGEGRADE);
-				// 4. 실행 객체 선언 & 데이터 세팅
-				pstmt = con.prepareStatement(CHANGEGRADE);
-				pstmt.setInt(1, vo.getGradeNo());
-				pstmt.setString(2, vo.getId());
-				// 5. 실행 객체 실행 -> executeUpdate() -> int 결과가 나옴.
-				result = pstmt.executeUpdate();
-				// 6. 데이터 표시 또는 담기
-				if (result == 0) { // 글 번호가 존재하지 않는다. -> 예외로 처리한다.
-					throw new Exception("예외 발생 : 아이디나 등급번호가 맞지 않습니다. 정보를 확인해 주세요.");
-				} // end of if
+		try {
+			// 1. 드라이버 확인 - DB 클래스에서 확인 완료
+			// 2. 오라클 접속
+			con = DB.getConnection();
+			// 3. sql 문 - 아래 LIST
+			System.out.println("sql : " + CHANGEGRADE);
+			// 4. 실행 객체 선언 & 데이터 세팅
+			pstmt = con.prepareStatement(CHANGEGRADE);
+			pstmt.setInt(1, vo.getGradeNo());
+			pstmt.setString(2, vo.getId());
+			// 5. 실행 객체 실행 -> executeUpdate() -> int 결과가 나옴.
+			result = pstmt.executeUpdate();
+			// 6. 데이터 표시 또는 담기
+			if (result == 0) { // 글 번호가 존재하지 않는다. -> 예외로 처리한다.
+				throw new Exception("예외 발생 : 아이디나 등급번호가 맞지 않습니다. 정보를 확인해 주세요.");
+			} // end of if
 
-			} catch (Exception e) {
-				e.printStackTrace();
-				// 특별한 예외는 그냥 전달한다.
-				if (e.getMessage().indexOf("예외 발생") >= 0)
-					throw e; // 오류 나면 던진다
-				// 그 외 처리 중 나타나는 오류에 대해서 사용자가 볼 수 잇는 예외로 만들어 전달한다.
-				else
-					throw new Exception("예외 발생 : 회원 등급 변경 DB 처리 중 예외가 발생했습니다.");
-			} finally {
-				// 7. 닫기
-				DB.close(con, pstmt);
-			} // end of try ~ finally
+		} catch (Exception e) {
+			e.printStackTrace();
+			// 특별한 예외는 그냥 전달한다.
+			if (e.getMessage().indexOf("예외 발생") >= 0)
+				throw e; // 오류 나면 던진다
+			// 그 외 처리 중 나타나는 오류에 대해서 사용자가 볼 수 잇는 예외로 만들어 전달한다.
+			else
+				throw new Exception("예외 발생 : 회원 등급 변경 DB 처리 중 예외가 발생했습니다.");
+		} finally {
+			// 7. 닫기
+			DB.close(con, pstmt);
+		} // end of try ~ finally
 
-			// 결과 데이터를 리턴 해 준다.
-			return result;
-		} // end of changeGrade()
-		
-		// 4-2. 회원 상태 수정 처리
-		// MemberController - (execute) - MemberChangeStatusService - Member.DAO.changeStatus()
-		public int changeStatus(MemberVO vo) throws Exception {
+		// 결과 데이터를 리턴 해 준다.
+		return result;
+	} // end of changeGrade()
+	
+	// 4-2. 회원 상태 수정 처리
+	// MemberController - (execute) - MemberChangeStatusService - Member.DAO.changeStatus()
+	public int changeStatus(MemberVO vo) throws Exception {
 			
 			// 결과를 저장할 수 있는 변수 선언.
 			int result = 0;
@@ -458,7 +458,7 @@ public class MemberDAO extends DAO {
 	} // end of login
 
 	// 6-2. 로그인 최근 접속일 업데이트
-	// NoticeController - (execute) - NoticeListService - Notice.DAO.increase()]
+	// MemberController - (execute) - MemberConUpdateService - Member.DAO.conUpdate()]
 	public int conUpdate(String id) throws Exception {
 
 		// 결과를 저장할 수 있는 변수 선언.
@@ -498,6 +498,43 @@ public class MemberDAO extends DAO {
 		return result;
 	} // end of update()
 
+	// 7. 회원이 받은 새로운 메세지 개수 가져오기
+	// AjaxController - (execute) - MemberNewMsgCntService - [MemberDAO.getNewMsgCnt()]
+	public Long getNewMsgCnt(String id) throws Exception {
+		// 결과를 저장할 수 있는 변수 선언.
+		Long newMsgCnt = null;
+		try {
+			// 1. 드라이버 확인 - DB 클래스에서 확인 완료
+			// 2. 오라클 접속
+			con = DB.getConnection();
+			// 3. sql 문 - 아래 LIST
+			System.out.println("sql : " + NEWMSGCNT);
+			// 4. 실행 객체 선언
+			pstmt = con.prepareStatement(NEWMSGCNT);
+			pstmt.setString(1, id);
+			// 5. 실행 객체 실행
+			rs = pstmt.executeQuery();
+			// 6. 데이터 표시 또는 담기
+			if (rs != null && rs.next()) {
+				// rs -> VO
+				newMsgCnt = rs.getLong(1);
+
+			} // end of if
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e; // 오류 나면 던진다
+		} finally {
+			// 7. 닫기
+			DB.close(con, pstmt, rs);
+		} // end of try ~ finally
+
+		// 결과 데이터를 리턴 해 준다.
+		return newMsgCnt;
+
+	} // end of view
+
+	
 	// 실행할 쿼리를 정의해 놓은 변수 선언
 	final String LIST = ""
 			+ " select id, name, birth, gender ,tel, gradeNo, gradeName, status, photo"
@@ -512,38 +549,38 @@ public class MemberDAO extends DAO {
 			;
 	
 	// 검색이 있는 경우 TOTALROW + search
-		final String TOTALROW = "select count(*) from member where (not id = 'admin') ";
+	final String TOTALROW = "select count(*) from member where (not id = 'admin') ";
+	
+	// LIST에 검색을 처리해서 만들어지는 sql문 작성 메서드
+	private String getListSQL(PageObject pageObject) {
+		String sql = LIST;
+		// 검색 쿼리 추가 - where를 추가하지 않는다. : false
+		sql += getSearch(pageObject);
+		sql += " and (m.gradeNo = g.gradeNo) ";
+		sql += " order by id asc" + " ) "
+				+ " ) where rnum between ? and ? ";
 		
-		// LIST에 검색을 처리해서 만들어지는 sql문 작성 메서드
-		private String getListSQL(PageObject pageObject) {
-			String sql = LIST;
-			// 검색 쿼리 추가 - where를 추가하지 않는다. : false
-			sql += getSearch(pageObject);
-			sql += " and (m.gradeNo = g.gradeNo) ";
-			sql += " order by id asc" + " ) "
-					+ " ) where rnum between ? and ? ";
-			
-			return sql;
-		}
-		
-		// 리스트의 검색만 처리하는 쿼리 - where
-		private String getSearch(PageObject pageObject) {
-			// where 뒤에 false를 붙힌다. 뒤에가 true 면 true
-			String sql = "";
-			String key = pageObject.getKey();
-			String word = pageObject.getWord();
-			// key 안에 t가 포함되어 있으면 title로 검생을 한다.
-			if(word != null && !word.equals("")) {
+		return sql;
+	}
+	
+	// 리스트의 검색만 처리하는 쿼리 - where
+	private String getSearch(PageObject pageObject) {
+		// where 뒤에 false를 붙힌다. 뒤에가 true 면 true
+		String sql = "";
+		String key = pageObject.getKey();
+		String word = pageObject.getWord();
+		// key 안에 t가 포함되어 있으면 title로 검생을 한다.
+		if(word != null && !word.equals("")) {
 //				sql += " and ( 1=0 ) ";
-				if(key.indexOf("i") >= 0) sql += " and id like ? ";
-				if(key.indexOf("n") >= 0) sql += " and name like ? ";
-				if(key.indexOf("t") >= 0) sql += " and tel like ? ";
-			}
-			return sql;
+			if(key.indexOf("i") >= 0) sql += " and id like ? ";
+			if(key.indexOf("n") >= 0) sql += " and name like ? ";
+			if(key.indexOf("t") >= 0) sql += " and tel like ? ";
 		}
-		
-		// 검색 쿼리의 ?(물음표) 데이터를 세팅하는 메서드
-		private int setSearchData(PageObject pageObject, PreparedStatement pstmt, int idx) throws SQLException {
+		return sql;
+	}
+	
+	// 검색 쿼리의 ?(물음표) 데이터를 세팅하는 메서드
+	private int setSearchData(PageObject pageObject, PreparedStatement pstmt, int idx) throws SQLException {
 
 			String key = pageObject.getKey();
 			String word = pageObject.getWord();
@@ -582,5 +619,7 @@ public class MemberDAO extends DAO {
 			+ " from member m, grade g " + " where (id = ? and pw = ? and status = '정상') and (g.gradeNo = m.gradeNo)";
 
 	final String CONUPDATE = "update member set conDate = sysDate where id = ?";
+	
+	final String NEWMSGCNT = "select newMsgCnt from member where id = ? ";
 
 } // end of class

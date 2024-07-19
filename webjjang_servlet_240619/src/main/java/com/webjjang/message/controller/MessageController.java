@@ -70,37 +70,42 @@ public class MessageController {
 				break;
 				
 				
-			case "/board/view.do":
-				System.out.println("2.일반게시판 글보기");
+			case "/message/view.do":
+				System.out.println("2. 메세지 상세보기");
 				// 1. 조회수 1증가(글보기), 2. 일반게시판 글보기 데이터 가져오기 : 글보기, 수정할 때
 				// 넘어 오는 글 번호와 조회수 수집 한다. (데이터는 request 안에 들어 있다.)
 				String strNo = request.getParameter("no");
-				String strInc = request.getParameter("inc");
-				String strRnum = request.getParameter("rnum");
-				System.out.println("BoardController.view() rnum = " + strRnum);
 				no = Long.parseLong(strNo);
-				Long inc = Long.parseLong(strInc);
-				Long rnum = Long.parseLong(strRnum);
+				
+				// 데이터 넘기기
+				MessageVO vo = new MessageVO();
+				vo.setNo(no);
+				// 받은 메세지 확인하는 처리
+				if (request.getParameter("accept").equals("1"))
+					vo.setAccepterId(id);
+				
+				// 이전 메세지
+//				String strRnum = request.getParameter("rnum");
+//				System.out.println("BoardController.view() rnum = " + strRnum);
+//				Long rnum = Long.parseLong(strRnum);
 				// 전달 데이터 - 글번호, 조회수 증가 여부(1 : 증가, 0: 증가 안함) : 배열 또는 Map
-				result = Execute.execute(Init.get(uri), new Long[] {no, inc});
+				result = Execute.execute(Init.get(uri), vo);
 				
 				// 가져온 데이터를 JSP로 보내기 위해서 request에 담는다.
 				request.setAttribute("vo", result);
 				
+				// JSP 보여지는 새로운 메세지를 다시 불러와서 세션에 집어 넣는다.
+				loginVO.setNewMsgCnt((Long) Execute.execute(Init.get("/ajax/newMsgCnt.do"), id));
+				
 				// DB 에서 데이터 가져오기 - 가져온 데이터는 LIST<BoardVO>
-				Object rnumResult = Execute.execute(Init.get("/board/rnumList.do"), rnum);
-				request.setAttribute("rnumList", rnumResult);
+//				Object rnumResult = Execute.execute(Init.get("/board/rnumList.do"), rnum);
+//				request.setAttribute("rnumList", rnumResult);
 				
-				// 댓글 페이지 객체
-				// 데이터 전달 - page / perPageNum / no / replyPage / replayPerPageNum
-				ReplyPageObject replyPageObject = ReplyPageObject.getInstance(request);
+				// 페이지 객체 담기
+				pageObject = PageObject.getInstance(request);
+				request.setAttribute("pageObject", pageObject);
 				
-				// 가져온 댓글 데이터 request에 담기
-				request.setAttribute("replyList", Execute.execute(Init.get("/boardreply/list.do"), replyPageObject));
-				// 댓글 페이지 객체 담기
-				request.setAttribute("replyPageObject", replyPageObject);
-				
-				jsp = "board/view";
+				jsp = "message/view";
 				break;
 			
 			// writeForm 은 리스트의 모달 창으로 대신 작성했다.
@@ -112,7 +117,7 @@ public class MessageController {
 				String content = request.getParameter("content");
 				
 				// 변수 - vo 저장하고 Service
-				MessageVO vo = new MessageVO();
+				vo = new MessageVO();
 				vo.setAccepterId(accepterId);
 				vo.setContent(content);
 				vo.setSenderId(id); // 보내는 사람은 본인이다.

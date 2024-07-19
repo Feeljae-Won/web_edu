@@ -10,17 +10,20 @@
 <title>Message List</title>
 <script type="text/javascript">
 	$(function() {
-		$(".msgModeBtn")
-	})
+		$(".dataRow").click(function(){
+			let no = $(this).find(".no").data("data");
+			let accept = $(this).data("accept"); // data-accept=value
+			console.log("no = " + no);
+			location = "view.do?no=" + no 
+					+ "&mode=${pageObject.acceptMode}&${pageObject.pageQuery}"
+					+ "&accept=" + accept;
+		});
+	});
 </script>
 <style type="text/css">
-.media {
-	display: flex;
-	align-items: center;
-}
-.media-body {
-	flex: 1;
-	display: inline-block;
+.dataRow:hover {
+	background: #4d4d4d;
+	cursor: pointer;
 }
 </style>
 </head>
@@ -51,41 +54,44 @@
 			</a>
 		</div>
 		<hr>
-		<div >
+		<div class="bg-dark text-white p-3" style="border-radius:8px;">
 			<c:if test="${ empty list }">메세지가 존재하지 않습니다.</c:if>
 			<c:if test="${ !empty list }">
 				<c:forEach items="${list }" var="vo">
 					<div
-						class="media p-1 dataRow mg-0 "
+						class="media p-1 dataRow mg-0 " data-accept="${(vo.senderId == login.id)?0:1 }"
 						style="border-radius: 5px; width: 100%;"
 					>
 						<c:if test="${vo.senderId == login.id }">
 							<!-- 내가 보낸 사람이다. 받는 사람의 정보만 표시한다. 오른쪽 정렬 -->
 							<div
-								class="media-body text-right mt-1 mb-1
-								${(empty vo.acceptDate)?'font-weight-bold list-group-item-warning':'' }"
+								class="media-body text-right mt-1 mb-1 
+								${(empty vo.acceptDate)?'font-weight-bold':'' }" 
 							>
 								<b>${vo.accepterName } </b><small><i>(${vo.accepterId })
 								</i>/ 보낸 날짜 : ${vo.sendDate } / 읽은 날짜 : ${(empty vo.acceptDate)?"읽지 않음":vo.acceptDate }
+								<span class="no" data-data="${vo.no}"></span>
 								</small>
 								<p class="mb-1">${vo.content }</p>
 							</div>
-							<img src="${vo.senderPhoto }" alt="/upload/image/noImage.png"
-								class="ml-3 mt-2 rounded-circle" style="width: 30px;"
+							<img src="${vo.accepterPhoto }" alt="/upload/image/noImage.png"
+								class="ml-3 mt-1 rounded-circle" style="width: 30px;"
 							>
 						</c:if>
 
 						<c:if test="${vo.senderId != login.id }">
 							<!-- 내가 받는 사람이다. 보낸 사람의 정보만 표시한다. -->
-							<img src="${vo.accepterPhoto }" alt="/upload/image/noImage.png"
-								class="mr-3 mt-2 rounded-circle" style="width: 30px;"
+							<img src="${vo.senderPhoto }" alt="/upload/image/noImage.png"
+								class="mr-3 mt-1 rounded-circle" style="width: 30px;"
 							>
 							<div
 								class="media-body mt-1 mb-1 
-								${(empty vo.acceptDate)?'font-weight-bold list-group-item-warning':'' }"
+								${(empty vo.acceptDate)?'font-weight-bold':'' } no" data-data="${vo.no}"
 							>
 								<b>${vo.senderName } </b> <small><i>(${vo.senderId })
+								<span class="no" data-data="${vo.no}"></span>
 								</i> / 보낸 날짜 : ${vo.sendDate } / 읽은 날짜 : ${(empty vo.acceptDate)?"읽지 않음":vo.acceptDate }
+								<span class="no" data-data="${vo.no}"></span>
 								</small>
 								<p class="mb-1">${vo.content }</p>
 							</div>
